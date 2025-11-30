@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('./partials/head.ejs') %>
+
+
+  <body style="background-color: #cfe7ed;">
+
+    <%- include('./partials/nav.ejs') %>
+
+      <div class="container container_vid1 py-4">
+
+
+        <div id="spinner" class="text-center my-4" style="display: none;">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+
+        <div id="gallery" class="row g-3"></div>
+
+        <nav class="d-flex justify-content-center mt-4">
+          <ul class="pagination" id="pagination" style="margin-bottom: 40px ;"></ul>
+        </nav>
+      </div>
+
+      <%- include('./partials/footer.ejs') %>
+
+        <style>
+          .page-btn.active {
+            background-color: #78dbd1;
+            /* светло-зелёный */
+            border-color: #36a8e5;
+            color: #e3ee08;
+          }
+        </style>
+
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            const params = new URLSearchParams(window.location.search);
+            const page = parseInt(params.get("page")) || 1;
+            fetchGalleryPage(page);
+          });
+        </script>
+
+        <script src="/js/gallery.js"></script>
+        <script src="/js/userfoto.js"></script>
+
+  </body>
+
+</html>

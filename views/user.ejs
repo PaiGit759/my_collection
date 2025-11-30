@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('./partials/head.ejs') %>
+
+
+  <body class="home">
+    <%- include('./partials/nav.ejs') %>
+
+      <div class="container my-5">
+
+        <div class="card-body">
+          <div class="profile-wrapper text-center container" style="background-color: #cfe7ed; max-width: 600px; ">
+            <h5 class="card-title mb-4">User Profile</h5>
+
+            <div style="margin: 50px;">
+
+              <div class="mb-3">
+                <span> Username : </span>
+                <span><strong>
+                    <%= user.username %>
+                  </strong></span>
+              </div>
+
+              <div class="mb-3">
+                <span> FirstName : </span>
+                <span><strong>
+                    <%= user.firstName %>
+                  </strong></span>
+              </div>
+
+              <div class="mb-3">
+                <span> LastName : </span>
+                <span><strong>
+                    <%= user.lastName %>
+                  </strong></span>
+              </div>
+
+              <div class="mb-3">
+                <span> Email : </span>
+                <span><strong>
+                    <%= user.email %>
+                  </strong></span>
+              </div>
+
+
+              <div class="foto-block mb-4">Foto
+                <img src="data:image/png;base64,<%= user.foto %>" width="20%" height="20%" object-fit="cover">
+              </div>
+
+              <div class="button-group">
+                <button id="logout-btn" class="btn btn-success">Log Out</button>
+                <button id="edit-btn" class="btn btn-success">Edit</button>
+                <button class="btn btn-success" onclick="goToIndex()">Return</button>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+      <%- include('./partials/footer.ejs') %>
+
+        <input type="hidden" id="user-data" value="<%= JSON.stringify(user) %>">
+
+        <script>
+          const userDataElement = document.getElementById('user-data');
+          const user9 = JSON.parse(userDataElement.value);
+          localStorage.setItem('currentUser', JSON.stringify(user9));
+        </script>
+
+        <script>
+
+          // Переход на главную с сохранённой страницей
+          function goToIndex() {
+            const page = localStorage.getItem('galleryPage') || 1;
+            localStorage.removeItem('galleryPage');
+            window.location.href = `/?page=${page}`;
+          }
+
+          document.getElementById('logout-btn').addEventListener('click', function () {
+            localStorage.removeItem('currentUser');
+            window.location.href = '/';
+          });
+        </script>
+
+        <script>
+          document.getElementById('edit-btn').addEventListener('click', function () {
+            window.location.href = `/edituser?id=${user9._id}`;
+          });
+        </script>
+
+
+        <style>
+          .home {
+            display: flex;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            font-size: 12px;
+            background-color: #cfe7ed;
+            color: black;
+            padding-top: 0;
+          }
+
+
+          .profile-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          }
+
+          .userfoto {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #ccc;
+            /* margin-bottom: 20px; */
+          }
+
+          .foto-block {
+            margin-bottom: 30px;
+          }
+
+          .button-group {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 10px;
+          }
+        </style>
+
+        <script src="/js/userfoto.js"></script>
+        <script src="/js/gallery.js"></script>
+  </body>
+
+</html>

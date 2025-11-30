@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('./partials/head.ejs') %>
+
+  <body class="home">
+    <%- include('./partials/nav.ejs') %>
+
+      <div class="container py-5">
+        <div class="row justify-content-center">
+          <div class="col-lg-8 col-md-10">
+            <form id="editcollection" method="post" action="/api/updatecollection" enctype="multipart/form-data">
+              <input type="hidden" name="collectionId" value="<%= collection._id %>">
+              <input type="hidden" id="cuser" name="userId">
+
+              <div class="text-center mb-4">
+                <h2>Title</h2>
+                <input type="text" class="form-control" name="title" value="<%= collection.title %>" required>
+              </div>
+
+              <div class="text-center mb-4">
+                <h4>Content</h4>
+                <textarea class="form-control" name="content" rows="8" required><%= collection.content %></textarea>
+              </div>
+
+              <div class="row text-center">
+
+                <div class="col-12 col-md-4 mb-3">
+                  <h5>Foto</h5>
+                  <img id="preview-foto" src="data:image/png;base64,<%= collection.foto %>"
+                    class="img-fluid rounded mb-2">
+                  <div class="d-flex align-items-center gap-2 flex-row flex-wrap" style="max-width: 100%;">
+                    <input type="file" name="foto" accept="image/*" id="input-foto" class="d-none">
+
+                    <button type="button" class="btn btn-primary"
+                      onclick="document.getElementById('input-foto').click();">
+                      Upload Image
+                    </button>
+
+                    <input type="text" id="file-name" class="form-control" placeholder="No file chosen" readonly
+                      style="width: auto; flex: 1 1 auto; min-width: 150px;">
+                  </div>
+                </div>
+
+                <div class="col-12 col-md-4 mb-3">
+                  <h5>Foto1</h5>
+                  <img id="preview-foto1" src="data:image/png;base64,<%= collection.foto1 %>"
+                    class="img-fluid rounded mb-2">
+                  <div class="d-flex align-items-center gap-2 flex-row flex-wrap" style="max-width: 100%;">
+                    <input type="file" name="foto1" accept="image/*" id="input-foto1" class="d-none">
+
+                    <button type="button" class="btn btn-primary"
+                      onclick="document.getElementById('input-foto1').click();">
+                      Upload Image 1
+                    </button>
+
+                    <input type="text" id="file-name1" class="form-control" placeholder="No file chosen" readonly
+                      style="width: auto; flex: 1 1 auto; min-width: 150px;">
+                  </div>
+                </div>
+
+
+                <div class="col-12 col-md-4 mb-3">
+                  <h5>Foto2</h5>
+                  <img id="preview-foto2" src="data:image/png;base64,<%= collection.foto2 %>"
+                    class="img-fluid rounded mb-2">
+                  <div class="d-flex align-items-center gap-2 flex-row flex-wrap" style="max-width: 100%;">
+                    <input type="file" name="foto2" accept="image/*" id="input-foto2" class="d-none">
+
+                    <button type="button" class="btn btn-primary"
+                      onclick="document.getElementById('input-foto2').click();">
+                      Upload Image 2
+                    </button>
+
+                    <input type="text" id="file-name2" class="form-control" placeholder="No file chosen" readonly
+                      style="width: auto; flex: 1 1 auto; min-width: 150px;">
+                  </div>
+                </div>
+
+                <div class="text-center mt-4">
+                  <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <input type="hidden" id="collection-id" name="collectionId" value="<%= collection.id %>">
+
+      <%- include('./partials/footer.ejs') %>
+        <script src="/js/userfoto.js"></script>
+
+        <script>
+
+          const fileInput = document.getElementById('input-foto');
+          const fileNameDisplay = document.getElementById('file-name');
+
+          fileInput.addEventListener('change', function () {
+            if (fileInput.files.length > 0) {
+              fileNameDisplay.value = fileInput.files[0].name;
+            } else {
+              fileNameDisplay.value = 'No file chosen';
+            }
+          });
+
+          const fileInput1 = document.getElementById('input-foto1');
+          const fileNameDisplay1 = document.getElementById('file-name1');
+
+          fileInput1.addEventListener('change', function () {
+            if (fileInput1.files.length > 0) {
+              fileNameDisplay1.value = fileInput.files[0].name;
+            } else {
+              fileNameDisplay.value = 'No file chosen';
+            }
+          });
+
+          const fileInput2 = document.getElementById('input-foto2');
+          const fileNameDisplay2 = document.getElementById('file-name2');
+
+          fileInput2.addEventListener('change', function () {
+            if (fileInput2.files.length > 0) {
+              fileNameDisplay2.value = fileInput2.files[0].name;
+            } else {
+              fileNameDisplay.value = 'No file chosen';
+            }
+          });
+
+
+        </script>
+
+        <script>
+
+          document.addEventListener('DOMContentLoaded', () => {
+            const storedUser = localStorage.getItem('currentUser');
+            const userId = storedUser ? JSON.parse(storedUser) : null;
+
+            if (userId) {
+              document.getElementById('cuser').value = userId._id;
+            } else {
+              alert('Please log in or register to continue.');
+              window.location.href = '/';
+            }
+
+            // Превью изображений
+            function previewImage(inputId, imgId) {
+              const input = document.getElementById(inputId);
+              const img = document.getElementById(imgId);
+
+              input.addEventListener('change', () => {
+                const file = input.files[0];
+                if (file) {
+                  const reader = new FileReader();
+                  reader.onload = e => {
+                    img.src = e.target.result;
+                  };
+                  reader.readAsDataURL(file);
+                }
+              });
+            }
+
+            previewImage('input-foto', 'preview-foto');
+            previewImage('input-foto1', 'preview-foto1');
+            previewImage('input-foto2', 'preview-foto2');
+          });
+
+        </script>
+
+        <style>
+          .custom-file-upload {
+            display: inline-block;
+            padding: 6px 12px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border-radius: 4px;
+          }
+        </style>
+
+
+  </body>
+
+</html>

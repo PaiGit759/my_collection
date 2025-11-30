@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('./partials/head.ejs') %>
+
+
+  <body class="home">
+    <%- include('./partials/nav.ejs') %>
+
+      <div class="position-relative">
+        <div class="position-absolute top-50 start-50 translate-middle">
+
+          <div style="margin: 50px;">
+
+            <div>username
+              <p>
+                <%= user.username %>
+              </p>
+            </div>
+
+
+            <div>firstName
+              <p>
+                <%= user.firstName %>
+              </p>
+            </div>
+            <div>lastName
+              <p>
+                <%= user.lastName %>
+              </p>
+            </div>
+
+            <div>email
+              <p>
+                <%= user.email %>
+              </p>
+            </div>
+
+            <div>foto
+              <img src="data:image/png;base64,<%= user.foto %>" width="30%" height="30%" </div>
+
+            </div>
+
+            <input type="hidden" id="user-data" value="<%= JSON.stringify(user) %>">
+
+          </div>
+        </div>
+
+
+  </body>
+
+</html>

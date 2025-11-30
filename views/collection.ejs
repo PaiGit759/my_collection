@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('./partials/head.ejs') %>
+
+  <body class="home">
+    <%- include('./partials/nav.ejs') %>
+
+      <div class="container py-5">
+        <div class="row justify-content-center">
+          <div class="col-lg-8 col-md-10">
+            <div class="text-center mb-4">
+              <h2>Title</h2>
+              <p>
+                <%= collection.title %>
+              </p>
+            </div>
+
+            <div class="text-center mb-4">
+              <h4>Content</h4>
+              <textarea class="form-control" rows="8"><%= collection.content %></textarea>
+            </div>
+
+            <div class="row text-center">
+              <div class="col-12 col-md-4 mb-3">
+                <h5>Foto</h5>
+                <img src="data:image/png;base64,<%= collection.foto %>" class="img-fluid rounded">
+              </div>
+              <div class="col-12 col-md-4 mb-3">
+                <h5>Foto1</h5>
+                <img src="data:image/png;base64,<%= collection.foto1 %>" class="img-fluid rounded">
+              </div>
+              <div class="col-12 col-md-4 mb-3">
+                <h5>Foto2</h5>
+                <img src="data:image/png;base64,<%= collection.foto2 %>" class="img-fluid rounded">
+              </div>
+            </div>
+
+
+            <div class="d-flex align-items-center justify-content-center flex-wrap">
+              <% if (userowner) { %>
+                <h5 class="me-3 mb-0">
+                  Owner
+                  <%= userowner.firstName || '' %>
+                    <%= userowner.lastName || '' %>
+                </h5>
+
+                <% if (userowner.foto) { %>
+                  <img src="data:image/png;base64,<%= userowner.foto %>" class="img-fluid rounded"
+                    style="max-width:100px; height:auto;">
+                  <% } %>
+                    <% } else { %>
+                      <h5 class="mb-0">Owner: Unknown</h5>
+                      <% } %>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="text-center my-4">
+          <button class="btn btn-success" onclick="goToIndex()">Return</button>
+        </div>
+
+        <div id="actionButtons" class="text-center my-4"></div>
+
+      </div>
+
+      <input type="hidden" id="collection_id" value="<%= collection.id %>">
+      <!-- <input type="hidden" id="collection" value="<%= collection %>"> -->
+
+      <%- include('./partials/footer.ejs') %>
+
+        <style>
+          .home {
+            display: flex;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            font-size: 12px;
+            background-color: #cfe7ed;
+            color: black;
+            padding-top: 0;
+          }
+
+          .userfoto {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #ccc;
+          }
+        </style>
+
+        <script>
+          // Переход на главную с сохранённой страницей
+          function goToIndex() {
+            const page = localStorage.getItem('galleryPage') || 1;
+            localStorage.removeItem('galleryPage');
+            window.location.href = `/?page=${page}`;
+          }
+
+        </script>
+
+        <script src="/js/userfoto.js"></script>
+
+
+        <script src="/js/gallery.js"></script>
+
+        <script>
+
+          const creatorId = '<%= collection.user ? collection.user._id : "" %>';
+          const collectionId = '<%= collection._id %>';
+          //         console.log('*********', user._id, '----', creatorId, '%%%', user.role);
+          if (user && (user.role === 'admin' || user._id === creatorId)) {
+            //         console.log('*********', user._id, '----', creatorId, '%%%', user.role)
+            const container = document.getElementById('actionButtons');
+
+            const editBtn = document.createElement('button');
+            editBtn.className = 'btn btn-primary me-2';
+            editBtn.textContent = 'Edit';
+            editBtn.id = "edit-btn";
+            //editBtn.onclick = () => editCollection(collectionId);
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'btn btn-danger';
+            deleteBtn.textContent = 'Delete';
+            deleteBtn.id = "delete-btn";
+            //deleteBtn.onclick = () => deleteCollection(collectionId);
+
+            container.appendChild(editBtn);
+            container.appendChild(deleteBtn);
+          }
+        </script>
+
+        <script>
+          document.getElementById('edit-btn').addEventListener('click', function () {
+            window.location.href = `/editcollection?id=${collection_id.value}`;
+          });
+
+          document.getElementById('delete-btn').addEventListener('click', function () {
+            const page = localStorage.getItem('galleryPage') || 1;
+            const isConfirmed = confirm('Are you sure you want to delete the collection?');
+
+            if (isConfirmed) {
+              window.location.href = `/deletecollection?id=${collectionId}&page=${page}`;
+            } else {
+              alert('Deletion cancelled by user');
+            }
+          });
+        </script>
+
+  </body>
+
+</html>
+
+
+<script>

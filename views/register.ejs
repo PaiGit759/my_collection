@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('./partials/head.ejs') %>
+
+  <body class="home">
+    <%- include('./partials/nav.ejs') %>
+      <div class="container my-5">
+
+        <div class="row justify-content-center">
+          <div class="col-12 col-md-8 col-lg-6">
+
+            <div class="card-body">
+              <div class="profile-wrapper text-center" style="background-color: #cfe7ed;">
+                <div style="margin: 50px;">
+                  <form id="register" method="post" action="api/register" enctype="multipart/form-data">
+                    
+                    <div class="mb-3">
+                      <label class="form-label">Username
+                        <input type="text" name="username" id="username" class="form-control">
+                      </label>
+                    </div>
+
+                    <div class="mb-3">
+                      <label class="form-label">FirstName
+                        <input type="text" name="firstName" id="firstName" class="form-control">
+                      </label>
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label">LastName
+                        <input type="text" name="lastName" id="lastName" class="form-control">
+                      </label>
+                    </div>
+
+                    <div class="mb-3">
+                      <label class="form-label">Email
+                        <input type="text" name="email" id="email" class="form-control">
+                      </label>
+                    </div>
+
+                    <div class="mb-3">
+                      <label class="form-label">Password
+                        <input type="text" name="password" id="password" class="form-control">
+                      </label>
+                    </div>
+
+                    <div class="mb-3">
+                      <label class="form-label">Photo</label>
+                      <div class="d-flex align-items-center gap-2 flex-row flex-wrap" style="max-width: 100%;">
+                        <input type="file" id="foto" name="foto" accept="image/*" class="d-none">
+
+                        <button type="button" class="btn btn-primary"
+                          onclick="document.getElementById('foto').click();">
+                          Upload Image
+                        </button>
+
+                        <input type="text" id="file-name" class="form-control" placeholder="No file chosen" readonly
+                          style="width: auto; flex: 1 1 auto; min-width: 150px;">
+                      </div>
+                    </div>
+
+
+
+                    <div>
+                      <input type="submit" value="Submit" class="btn btn-primary">
+                    </div>
+                  </form>
+
+                  <div>
+                    <%= message %>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </div>
+
+      </div>
+      <%- include('./partials/footer.ejs') %>
+
+        <script src="/js/userfoto.js"></script>
+        <script>
+          const fileInput = document.getElementById('foto');
+          const fileNameDisplay = document.getElementById('file-name');
+
+          fileInput.addEventListener('change', function () {
+            if (fileInput.files.length > 0) {
+              fileNameDisplay.value = fileInput.files[0].name;
+            } else {
+              fileNameDisplay.value = 'No file chosen';
+            }
+          });
+        </script>
+        <style>
+          .home {
+            display: flex;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            font-size: 12px;
+            background-color: #cfe7ed;
+            color: black;
+            padding-top: 0;
+          }
+
+          .profile-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 20px;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          }
+        </style>
+
+
+  </body>
+
+</html>
