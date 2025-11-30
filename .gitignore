@@ -1,4 +1,4 @@
 node_modules/
-command.txt
+*.txt
 .env
 
