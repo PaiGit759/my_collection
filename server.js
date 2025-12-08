@@ -1,4 +1,6 @@
 const express = require("express");
+const path = require('path');
+
 const bodyParser = require("body-parser");
 const mongoose = require('mongoose');
 
@@ -23,7 +25,10 @@ app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 
 //app.use(express.static('styles'));
-app.use(express.static('static'));
+//app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.set('views', path.join(__dirname, 'views'));
 
 mongoose
   .connect(process.env.MONGO_URL,)
