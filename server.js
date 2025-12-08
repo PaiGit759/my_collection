@@ -99,6 +99,9 @@ app.get('/gallerypage', getgallerypage);
 app.get('/collection', collection);
 
 
-app.listen(process.env.PORT, () => {
+/* app.listen(process.env.PORT, () => {
   console.log(`listening port http://localhost:${process.env.PORT}`);
-});
+}); */
+
+const port = process.env.PORT || 3000;
+app.listen(port, () => console.log(`listening port http://localhost:${process.env.PORT}`));
