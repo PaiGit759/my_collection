@@ -30,12 +30,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.set('views', path.join(__dirname, 'views'));
 
-mongoose
+/* mongoose
   .connect(process.env.MONGO_URL,)
   //.connect('mongodb+srv://' + encodeURIComponent("panig789") + ':' + encodeURIComponent("N%cU*znC9DPEEFv") + '@cluster0.wrgnewp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',)
   //mongodb + srv://panig789:<db_password>@cluster0.wrgnewp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
   .then((res) => console.log('Connected to DB'))
   .catch((error) => console.log(error));
+ */
+
+mongoose.connect(process.env.MONGO_URL, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+  .then(() => console.log('Connected to MongoDB Atlas'))
+  .catch(err => console.error('MongoDB connection error:', err));
 
 
 app.use('/api', authRouter);

@@ -1,0 +1,8 @@
+ MONGO_URL = mongodb+srv://PuzAI:PuzAI759@cluster0.wrgnewp.mongodb.net/
+#   //MONGO_URL = mongodb+srv://panig789:N%cU*znC9DPEEFv@cluster0.wrgnewp.mongodb.net/
+# MONGO_URL = mongodb+srv://panig789:N%cU*znC9DPEEFv@cluster0.wrgnewp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+PORT = 3000
+
+
+# //N%cU*znC9DPEEFv
+# mongodb+srv://panig789:<db_password>@cluster0.wrgnewp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
