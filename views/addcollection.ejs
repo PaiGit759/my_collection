@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <%- include('./partials/head.ejs') %>
 
@@ -74,6 +74,124 @@
 
         </script>
 
+  </body>
+
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<%- include('./partials/head.ejs') %>
+
+  <body class="home">
+    <%- include('./partials/nav.ejs') %>
+
+      <div class="container py-5">
+        <div class="row justify-content-center">
+          <div class="col-lg-8 col-md-10">
+            <form id="addcollection" method="post" action="api/addcollection" enctype="multipart/form-data">
+              <div class="mb-3">
+                <label class="form-label">Title
+                  <input type="text" name="title" id="title" class="form-control">
+                </label>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label">Content</label>
+                <textarea name="content" id="content" rows="7" class="form-control"></textarea>
+              </div>
+
+              <div class="row text-center">
+                <!-- Foto -->
+                <div class="col-12 col-md-4 mb-3">
+                  <h5>Foto</h5>
+                  <img id="preview-foto" src="" class="img-fluid rounded mb-2" style="max-height:200px;">
+                  <div class="d-flex align-items-center gap-2 flex-row flex-wrap">
+                    <input type="file" name="foto" accept="image/*" id="input-foto" class="d-none">
+                    <button type="button" class="btn btn-primary"
+                      onclick="document.getElementById('input-foto').click();">Upload Image</button>
+                    <input type="text" id="file-name" class="form-control" placeholder="No file chosen" readonly
+                      style="flex:1 1 auto; min-width:150px;">
+                  </div>
+                </div>
+
+                <!-- Foto1 -->
+                <div class="col-12 col-md-4 mb-3">
+                  <h5>Foto1</h5>
+                  <img id="preview-foto1" src="" class="img-fluid rounded mb-2" style="max-height:200px;">
+                  <div class="d-flex align-items-center gap-2 flex-row flex-wrap">
+                    <input type="file" name="foto1" accept="image/*" id="input-foto1" class="d-none">
+                    <button type="button" class="btn btn-primary"
+                      onclick="document.getElementById('input-foto1').click();">Upload Image 1</button>
+                    <input type="text" id="file-name1" class="form-control" placeholder="No file chosen" readonly
+                      style="flex:1 1 auto; min-width:150px;">
+                  </div>
+                </div>
+
+                <!-- Foto2 -->
+                <div class="col-12 col-md-4 mb-3">
+                  <h5>Foto2</h5>
+                  <img id="preview-foto2" src="" class="img-fluid rounded mb-2" style="max-height:200px;">
+                  <div class="d-flex align-items-center gap-2 flex-row flex-wrap">
+                    <input type="file" name="foto2" accept="image/*" id="input-foto2" class="d-none">
+                    <button type="button" class="btn btn-primary"
+                      onclick="document.getElementById('input-foto2').click();">Upload Image 2</button>
+                    <input type="text" id="file-name2" class="form-control" placeholder="No file chosen" readonly
+                      style="flex:1 1 auto; min-width:150px;">
+                  </div>
+                </div>
+              </div>
+
+              <div class="text-center mt-4">
+                <input type="submit" value="Submit" class="btn btn-primary">
+              </div>
+
+              <input type="hidden" name="cuser" id="cuser">
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <%- include('./partials/footer.ejs') %>
+        <script src="/js/userfoto.js"></script>
+
+        <script>
+          document.addEventListener('DOMContentLoaded', () => {
+            const storedUser = localStorage.getItem('currentUser');
+            const userId = storedUser ? JSON.parse(storedUser) : null;
+
+            if (userId) {
+              document.getElementById('cuser').value = userId._id;
+            } else {
+              alert('Please log in or register to continue.');
+              window.location.href = '/';
+            }
+
+            // функция превью
+            function setupPreview(inputId, imgId, fileNameId) {
+              const input = document.getElementById(inputId);
+              const img = document.getElementById(imgId);
+              const fileNameDisplay = document.getElementById(fileNameId);
+
+              input.addEventListener('change', () => {
+                if (input.files.length > 0) {
+                  fileNameDisplay.value = input.files[0].name;
+                  const reader = new FileReader();
+                  reader.onload = e => {
+                    img.src = e.target.result;
+                  };
+                  reader.readAsDataURL(input.files[0]);
+                } else {
+                  fileNameDisplay.value = 'No file chosen';
+                  img.src = '';
+                }
+              });
+            }
+
+            setupPreview('input-foto', 'preview-foto', 'file-name');
+            setupPreview('input-foto1', 'preview-foto1', 'file-name1');
+            setupPreview('input-foto2', 'preview-foto2', 'file-name2');
+          });
+        </script>
   </body>
 
 </html>
