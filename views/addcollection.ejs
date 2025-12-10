@@ -1,83 +1,3 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<%- include('./partials/head.ejs') %>
-
-  <body class="home">
-
-    <%- include('./partials/nav.ejs') %>
-
-      <div class="position-relative">
-        <div class="position-absolute top-50 start-50 translate-middle">
-
-          <form id="addcollection" method="post" action="api/addcollection" enctype="multipart/form-data">
-            <div class="mb-3">
-              <label class="form-label">title
-                <input type="text" name="title" id="title" class="form-control">
-              </label>
-            </div>
-
-
-            <textarea name="content" id="content" rows="7" cols="40">
-                        </textarea>
-
-
-            <div class="input-group">
-              <label class="form-label">Foto <br>
-                <input type="file" name="foto" id="foto" class="form-control-file mb-3"
-                  aria-describedby="inputGroupFileAddon03" aria-label="Upload" accept="image/*">
-              </label>
-            </div>
-
-
-            <div class="input-group">
-              <label class="form-label">Foto1 <br>
-                <input type="file" name="foto1" id="foto1" class="form-control-file mb-3"
-                  aria-describedby="inputGroupFileAddon03" aria-label="Upload" accept="image/*">
-              </label>
-            </div>
-
-            <div class="input-group">
-              <label class="form-label">Foto2 <br>
-                <input type="file" name="foto2" id="foto2" class="form-control-file mb-3"
-                  aria-describedby="inputGroupFileAddon03" aria-label="Upload" accept="image/*">
-              </label>
-            </div>
-
-
-            <div>
-              <input type="submit" value="Submit" class="btn btn-primary">
-            </div>
-
-            <input type="hidden" name="cuser" id="cuser">
-
-          </form>
-
-        </div>
-      </div>
-
-
-      <%- include('./partials/footer.ejs') %>
-        <script src="/js/userfoto.js"></script>
-
-        <script>
-          document.addEventListener('DOMContentLoaded', () => {
-            const storedUser = localStorage.getItem('currentUser');
-            const userId = storedUser ? JSON.parse(storedUser) : null;
-
-            if (userId) {
-              document.getElementById('cuser').value = userId._id;
-            } else {
-              alert('Please log in or register to continue.');
-              window.location.href = '/';
-            }
-          });
-
-        </script>
-
-  </body>
-
-</html> -->
-
 <!DOCTYPE html>
 <html lang="en">
 <%- include('./partials/head.ejs') %>
@@ -166,7 +86,7 @@
               window.location.href = '/';
             }
 
-            // функция превью
+            // preview function
             function setupPreview(inputId, imgId, fileNameId) {
               const input = document.getElementById(inputId);
               const img = document.getElementById(imgId);

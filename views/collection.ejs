@@ -40,8 +40,11 @@
               <% if (userowner) { %>
                 <h5 class="me-3 mb-0">
                   Owner
-                  <%= userowner.firstName || '' %>
-                    <%= userowner.lastName || '' %>
+                  <b>
+                    <%= userowner.firstName || '' %>
+                      <%= userowner.lastName || '' %>
+                  </b>
+                  ( <%= userowner.email || '' %>)
                 </h5>
 
                 <% if (userowner.foto) { %>
@@ -65,7 +68,6 @@
       </div>
 
       <input type="hidden" id="collection_id" value="<%= collection.id %>">
-      <!-- <input type="hidden" id="collection" value="<%= collection %>"> -->
 
       <%- include('./partials/footer.ejs') %>
 
@@ -92,7 +94,7 @@
         </style>
 
         <script>
-          // Переход на главную с сохранённой страницей
+          // Go to the home page with the saved page
           function goToIndex() {
             const page = localStorage.getItem('galleryPage') || 1;
             localStorage.removeItem('galleryPage');
@@ -110,22 +112,19 @@
 
           const creatorId = '<%= collection.user ? collection.user._id : "" %>';
           const collectionId = '<%= collection._id %>';
-          //         console.log('*********', user._id, '----', creatorId, '%%%', user.role);
+
           if (user && (user.role === 'admin' || user._id === creatorId)) {
-            //         console.log('*********', user._id, '----', creatorId, '%%%', user.role)
             const container = document.getElementById('actionButtons');
 
             const editBtn = document.createElement('button');
             editBtn.className = 'btn btn-primary me-2';
             editBtn.textContent = 'Edit';
             editBtn.id = "edit-btn";
-            //editBtn.onclick = () => editCollection(collectionId);
 
             const deleteBtn = document.createElement('button');
             deleteBtn.className = 'btn btn-danger';
             deleteBtn.textContent = 'Delete';
             deleteBtn.id = "delete-btn";
-            //deleteBtn.onclick = () => deleteCollection(collectionId);
 
             container.appendChild(editBtn);
             container.appendChild(deleteBtn);

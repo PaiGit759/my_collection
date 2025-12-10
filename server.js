@@ -24,26 +24,11 @@ app.use(bodyParser.json());
 
 app.use(express.urlencoded({ extended: false }));
 
-//app.use(express.static('styles'));
-//app.use(express.static('public'));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.set('views', path.join(__dirname, 'views'));
 
-/* mongoose
-  .connect(process.env.MONGO_URL,)
-  //.connect('mongodb+srv://' + encodeURIComponent("panig789") + ':' + encodeURIComponent("N%cU*znC9DPEEFv") + '@cluster0.wrgnewp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0',)
-  //mongodb + srv://panig789:<db_password>@cluster0.wrgnewp.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
-  .then((res) => console.log('Connected to DB'))
-  .catch((error) => console.log(error));
- */
-
-mongoose.connect(process.env.MONGO_URL,
-  //   {
-  //   useNewUrlParser: true,
-  //   useUnifiedTopology: true
-  // }
-)
+mongoose.connect(process.env.MONGO_URL,)
   .then(() => console.log('Connected to MongoDB Atlas'))
   .catch(err => console.error('MongoDB connection error:', err));
 
@@ -59,16 +44,10 @@ app.get("/", (req, res) => {
 
 app.get("/getUsers", (req, res) => {
   const title = 'My collection';
-  //  const users = getUsers;
-  //  console.log('#####', user);
-  //  res.render(createPath('index'), { title });
 });
 
 app.get("/users", (req, res) => {
   const title = 'My collection';
-  //  const users = getUsers;
-  // console.log('#####');
-  //res.render(createPath('index'), { title });
 });
 
 app.get('/user', user);
@@ -107,11 +86,6 @@ app.get('/gallery/count', getgallerycount);
 app.get('/gallerypage', getgallerypage);
 
 app.get('/collection', collection);
-
-
-/* app.listen(process.env.PORT, () => {
-  console.log(`listening port http://localhost:${process.env.PORT}`);
-}); */
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => console.log(`listening port http://localhost:${process.env.PORT}`));

@@ -21,8 +21,6 @@ router.post('/updatecollection', upload.fields([
 
 router.get('/editcollection', editcollection);
 
-//router.get('/deletecollection', deletecollection);
-
 router.get('/gallery', getallcollection);
 
 router.get('/gallery/count', getgallerycount);
@@ -30,8 +28,6 @@ router.get('/gallery/count', getgallerycount);
 router.get('/gallerypage', getgallerypage);
 
 router.get('/collection', collection);
-
-
 
 module.exports = router;
 
