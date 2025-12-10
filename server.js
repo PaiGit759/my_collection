@@ -38,10 +38,12 @@ app.set('views', path.join(__dirname, 'views'));
   .catch((error) => console.log(error));
  */
 
-mongoose.connect(process.env.MONGO_URL, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-})
+mongoose.connect(process.env.MONGO_URL,
+  //   {
+  //   useNewUrlParser: true,
+  //   useUnifiedTopology: true
+  // }
+)
   .then(() => console.log('Connected to MongoDB Atlas'))
   .catch(err => console.error('MongoDB connection error:', err));
 
