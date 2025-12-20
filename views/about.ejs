@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('./partials/head.ejs') %>
+
+
+  <body class="home">
+    <%- include('./partials/nav.ejs') %>
+
+
+      <div style="text-align: center; margin: 20px 0;"> <img src="/image/Anatolii.jpg"
+          style="width: 50%; object-fit: cover; border-radius: 10px;">
+      </div>
+
+      <div
+        style="color: blueviolet; font-size: 1.2rem; font-weight: 600; line-height: 1.6; margin: 20px; text-align: center;">
+        This website was designed for people who want to showcase their collections. <br>
+
+        Anyone can view collections, but adding, editing, and deleting requires user registration.<br>
+
+        Registration is by email; the provided address is not verified, but it must be in the correct format.<br>
+
+        However, if you want someone to contact you, please provide a valid email address.<br>
+
+        The website is written in Node.js and Expess.js using the MONGODB cloud database.<br>
+
+        The website is hosted on the free Versel hosting service. I don't know how long it will be up there,<br>
+
+        or what data volume MONGODB will allow. This website is designed for training purposes,<br>
+
+        therefore, by using it, you agree that I bear no responsibility for its continued existence or anyone's use
+        of<br>
+        the data posted on the website.<br>
+
+        Website developer: Anatoly Puzin.
+
+      </div>
+      <%- include('./partials/footer.ejs') %>
+
+
+        <style>
+          .home {
+            display: flex;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            font-size: 12px;
+            background-color: #cfe7ed;
+            color: black;
+            padding-top: 0;
+          }
+
+
+          .profile-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: auto;
+            padding: 30px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          }
+
+          .userfoto {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #ccc;
+            /* margin-bottom: 20px; */
+          }
+
+          .foto-block {
+            margin-bottom: 30px;
+          }
+
+          .button-group {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 10px;
+          }
+        </style>
+
+        <script src="/js/userfoto.js"></script>
+
+  </body>
+
+</html>

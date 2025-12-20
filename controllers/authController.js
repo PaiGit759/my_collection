@@ -67,7 +67,7 @@ const updateuser = async (req, res) => {
         ...(str64 && { foto: str64 }),
     };
 
-    // Только если пароль передан — хэшируем и добавляем в обновление
+    // Only if the password is transmitted, we hash it and add it to the update.
     if (pass && pass.trim() !== "") {
         const salt = await bcrypt.genSalt(10);
         const hash = await bcrypt.hash(pass, salt);

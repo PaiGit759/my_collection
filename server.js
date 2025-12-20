@@ -79,6 +79,11 @@ app.get("/addcollection", (req, res) => {
   res.render(createPath('addcollection'));
 });
 
+app.get("/about", (req, res) => {
+  const title = 'About';
+  res.render(createPath('about'));
+});
+
 app.get('/gallery', getallcollection);
 
 app.get('/gallery/count', getgallerycount);
