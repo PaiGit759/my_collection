@@ -51,7 +51,7 @@ const createPath = require('../helpers/create-path.js');
 // }
 
 
-const addcollection = (req, res) => {
+/* const addcollection = (req, res) => {
     const base64Files = {};
     ['foto', 'foto1', 'foto2'].forEach(field => {
         if (req.files[field]) {
@@ -95,6 +95,48 @@ const addcollection = (req, res) => {
         .catch(() => res.render(createPath('error')));
 
 };
+ */
+
+
+const addcollection = async (req, res) => {
+    try {
+        const base64Files = {};
+
+        ['foto', 'foto1', 'foto2'].forEach(field => {
+            if (req.files?.[field]?.[0]) {
+                base64Files[field] = req.files[field][0].buffer.toString('base64');
+            }
+        });
+
+        const { title, content, cuser } = req.body;
+
+        const user = await User.findById(cuser);
+        if (!user) throw new Error('User not found');
+
+        const collection = await Collection.create({
+            title,
+            content,
+            foto: base64Files.foto || "",
+            foto1: base64Files.foto1 || "",
+            foto2: base64Files.foto2 || "",
+            user: user._id
+        });
+
+        const populated = await Collection.findById(collection._id)
+            .populate('user', 'firstName lastName foto');
+
+        res.render(createPath('collection'), {
+            title: 'My collection',
+            collection: populated,
+            userowner: populated.user || null
+        });
+
+    } catch (err) {
+        console.error('ADD COLLECTION ERROR:', err);
+        res.render(createPath('error'));
+    }
+};
+
 
 
 const deletecollection = (req, res) => {
