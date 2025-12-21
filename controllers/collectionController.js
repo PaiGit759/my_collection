@@ -122,7 +122,7 @@ const updatecollection = async (req, res) => {
 
     const { collectionId, title, content, userId } = req.body;
 
-    console.log('$$$$$$$$$', userId);
+    //   console.log('$$$$$$$$$', userId);
 
     const base64Files = {};
 
