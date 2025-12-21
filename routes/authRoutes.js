@@ -5,6 +5,7 @@ const { register, login, getUsers, addPost, user, curuser, edituser, updateuser 
 var storage = multer.memoryStorage()
 var upload = multer({ storage: storage })
 
+
 const router = express.Router();
 
 router.get('/users', getUsers);
