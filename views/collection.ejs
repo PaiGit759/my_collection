@@ -114,6 +114,9 @@
           const collectionId = '<%= collection._id %>';
 
           if (user && (user.role === 'admin' || user._id === creatorId)) {
+
+            // console.log('$$$$$$$$$', user._id, creatorId);
+
             const container = document.getElementById('actionButtons');
 
             const editBtn = document.createElement('button');

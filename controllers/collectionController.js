@@ -91,7 +91,9 @@ const addcollection = (req, res) => {
                 }
             );
         })
-        .catch(error => handleError(res, error));
+        //   .catch(error => handleError(res, error));
+        .catch(() => res.render(createPath('error')));
+
 };
 
 
@@ -118,7 +120,9 @@ const editcollection = (req, res) => {
 
 const updatecollection = async (req, res) => {
 
-    const { collectionId, title, content } = req.body;
+    const { collectionId, title, content, userId } = req.body;
+
+    console.log('$$$$$$$$$', userId);
 
     const base64Files = {};
 
@@ -145,7 +149,21 @@ const updatecollection = async (req, res) => {
             updateFields,
             { new: true }
         )
-        .then((collection) => res.render(createPath('collection'), { collection }))
+        // .then((collection) => res.render(createPath('collection'), { collection }))
+
+        /*     .then((collection) => res.render(createPath('collection'), {
+                title: 'My collection',
+                collection: populated,
+                userowner: populated.user || null
+            })) */
+
+
+        .then(async (collection) => {
+            const populated = await collection.populate('user'); res.render(createPath('collection'),
+                { title: 'My collection', collection: populated, userowner: populated.user || null });
+        })
+
+
         .catch((error) => res.render(createPath('error')));
 };
 
