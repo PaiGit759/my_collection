@@ -33,12 +33,21 @@ async function fetchGalleryPage(page) {
     try {
         const res = await fetch(`/gallerypage?page=${page}&limit=${itemsPerPage}`);
         const data = await res.json();
+        /*         const pageObjects = data.map((item, i) => ({
+                    title: item.title || `${i + 1}`,
+                    img: item.foto || `https://images.unsplash.com/photo-1543466835-00a7907e9de1`,
+                    formattedDate: new Date(item.createdAt).toISOString().replace('T', ' ').slice(0, 19),
+                    id: item._id,
+                })); */
+
         const pageObjects = data.map((item, i) => ({
             title: item.title || `${i + 1}`,
-            img: item.foto || `https://images.unsplash.com/photo-1543466835-00a7907e9de1`,
+            img: item.foto ? `/image/${item.foto}` : `https://images.unsplash.com/photo-1543466835-00a7907e9de1`,
             formattedDate: new Date(item.createdAt).toISOString().replace('T', ' ').slice(0, 19),
             id: item._id,
         }));
+
+
 
         renderGallery(pageObjects, page);
     } catch (err) {
@@ -67,16 +76,28 @@ function renderGallery(pageItems, page) {
     pageItems.forEach((obj) => {
         const col = document.createElement("div");
         col.className = "col-12 col-sm-6 col-md-3 col-lg-2";
+        /*        col.innerHTML = `
+             <div class="card h-100">
+               <img src="data:image/png;base64,${obj.img}" class="card-img-top" alt="${obj.title}" />
+               <div class="card-body text-center">
+                 <h6 class="card-title"><b>${obj.title}</b></h6>
+                 <h6 class="card-title"> № ${i + 1 + 18 * (page - 1)}(${obj.formattedDate})</h6>
+                 <a href="/collection/?id=${obj.id}" class="btn btn-primary btn-sm" onclick="localStorage.setItem('galleryPage', ${page})">Read more</a>
+               </div>
+             </div>
+           `; */
+
         col.innerHTML = `
-      <div class="card h-100">
-        <img src="data:image/png;base64,${obj.img}" class="card-img-top" alt="${obj.title}" />
-        <div class="card-body text-center">
-          <h6 class="card-title"><b>${obj.title}</b></h6>
-          <h6 class="card-title"> № ${i + 1 + 18 * (page - 1)}(${obj.formattedDate})</h6>
-          <a href="/collection/?id=${obj.id}" class="btn btn-primary btn-sm" onclick="localStorage.setItem('galleryPage', ${page})">Read more</a>
-        </div>
-      </div>
-    `;
+  <div class="card h-100">
+    <img src="${obj.img}" class="card-img-top" alt="${obj.title}" />
+    <div class="card-body text-center">
+      <h6 class="card-title"><b>${obj.title}</b></h6>
+      <h6 class="card-title"> № ${i + 1 + 18 * (page - 1)}(${obj.formattedDate})</h6>
+      <a href="/collection/?id=${obj.id}" class="btn btn-primary btn-sm" onclick="localStorage.setItem('galleryPage', ${page})">Read more</a>
+    </div>
+  </div>
+`;
+
 
         gallery.appendChild(col);
 

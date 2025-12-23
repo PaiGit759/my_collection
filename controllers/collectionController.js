@@ -4,6 +4,15 @@ const User = require('../models/userModel.js');
 
 const createPath = require('../helpers/create-path.js');
 
+//const { gridfsBucket } = require("../server"); // путь подправь под свой проект
+
+//const { gridfsBucket } = require('../server.js');
+
+const { getGridFSBucket } = require("./gridfs");
+
+
+//const Collection = require("../models/Collection");
+
 // const addcollection = async (req, res) => {
 //     const base64Files = {};
 
@@ -98,7 +107,7 @@ const createPath = require('../helpers/create-path.js');
  */
 
 
-const addcollection = async (req, res) => {
+/* const addcollection = async (req, res) => {
     try {
         const base64Files = {};
 
@@ -137,6 +146,111 @@ const addcollection = async (req, res) => {
     }
 };
 
+ */
+
+
+
+/* const addcollection = async (req, res) => {
+    try {
+        const gridfsBucket = getGridFSBucket();
+        if (!gridfsBucket) {
+            return res.status(500).json({ error: "GridFS not initialized yet" });
+        }
+
+        const uploadToGridFS = (file) => {
+            return new Promise((resolve, reject) => {
+                if (!file) return resolve(null);
+
+                const stream = gridfsBucket.openUploadStream(file.originalname);
+                stream.end(file.buffer);
+
+                stream.on("finish", () => resolve(stream.id));
+                stream.on("error", reject);
+            });
+        };
+
+        const fotoId = await uploadToGridFS(req.files.foto?.[0]);
+        const foto1Id = await uploadToGridFS(req.files.foto1?.[0]);
+        const foto2Id = await uploadToGridFS(req.files.foto2?.[0]);
+
+        const item = new Collection({
+            title: req.body.title,
+            description: req.body.description,
+            foto: fotoId,
+            foto1: foto1Id,
+            foto2: foto2Id,
+            createdAt: new Date()
+        });
+
+        await item.save();
+
+        res.json({ success: true, item });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: "Upload failed" });
+    }
+};
+ */
+
+const addcollection = async (req, res) => {
+    try {
+        const gridfsBucket = getGridFSBucket();
+        if (!gridfsBucket) {
+            return res.status(500).send("GridFS not initialized yet");
+        }
+
+        const uploadToGridFS = (file) => {
+            return new Promise((resolve, reject) => {
+                if (!file) return resolve(null);
+
+                const stream = gridfsBucket.openUploadStream(file.originalname);
+                stream.end(file.buffer);
+
+                stream.on("finish", () => resolve(stream.id));
+                stream.on("error", reject);
+            });
+        };
+
+        // Загружаем фото
+        const fotoId = await uploadToGridFS(req.files.foto?.[0]);
+        const foto1Id = await uploadToGridFS(req.files.foto1?.[0]);
+        const foto2Id = await uploadToGridFS(req.files.foto2?.[0]);
+
+        // Достаём данные из формы
+        const { title, content, cuser } = req.body;
+
+        // Находим пользователя
+        const user = await User.findById(cuser);
+        if (!user) throw new Error("User not found");
+
+        // Создаём коллекцию
+        const collection = await Collection.create({
+            title,
+            content,
+            foto: fotoId,
+            foto1: foto1Id,
+            foto2: foto2Id,
+            user: user._id,
+            createdAt: new Date()
+        });
+
+        // Делаем populate
+        const populated = await Collection.findById(collection._id)
+            .populate("user", "firstName lastName foto");
+
+        // Рендерим страницу
+        res.render(createPath("collection"), {
+            title: "My collection",
+            collection: populated,
+            userowner: populated.user || null
+        });
+
+    } catch (err) {
+        console.error("ADD COLLECTION ERROR:", err);
+        res.render(createPath("error"));
+    }
+};
 
 
 const deletecollection = (req, res) => {
@@ -160,54 +274,117 @@ const editcollection = (req, res) => {
         .catch((error) => handleError(res, error));
 };
 
+// const updatecollection = async (req, res) => {
+
+//     const { collectionId, title, content, userId } = req.body;
+
+//     //   console.log('$$$$$$$$$', userId);
+
+//     const base64Files = {};
+
+//     ['foto', 'foto1', 'foto2'].forEach(field => {
+//         if (req.files[field]) {
+//             const fileBuffer = req.files[field][0].buffer;
+//             const base64String = fileBuffer.toString('base64');
+//             base64Files[field] = base64String;
+//         }
+//     });
+
+//     const { foto, foto1, foto2 } = base64Files;
+
+//     const updateFields = {
+//         title,
+//         content,
+//         ...(foto && { foto }),
+//         ...(foto1 && { foto1 }),
+//         ...(foto2 && { foto2 }),
+//     };
+
+//     Collection
+//         .findByIdAndUpdate(collectionId,
+//             updateFields,
+//             { new: true }
+//         )
+//         // .then((collection) => res.render(createPath('collection'), { collection }))
+
+//         /*     .then((collection) => res.render(createPath('collection'), {
+//                 title: 'My collection',
+//                 collection: populated,
+//                 userowner: populated.user || null
+//             })) */
+
+
+//         .then(async (collection) => {
+//             const populated = await collection.populate('user'); res.render(createPath('collection'),
+//                 { title: 'My collection', collection: populated, userowner: populated.user || null });
+//         })
+
+
+//         .catch((error) => res.render(createPath('error')));
+// };
+
+
+///const { getGridFSBucket } = require("../gridfs");
+//const mongoose = require("mongoose");
+//const Collection = require("../models/collectionModel");
+
 const updatecollection = async (req, res) => {
+    try {
+        const { collectionId, title, content } = req.body;
 
-    const { collectionId, title, content, userId } = req.body;
-
-    //   console.log('$$$$$$$$$', userId);
-
-    const base64Files = {};
-
-    ['foto', 'foto1', 'foto2'].forEach(field => {
-        if (req.files[field]) {
-            const fileBuffer = req.files[field][0].buffer;
-            const base64String = fileBuffer.toString('base64');
-            base64Files[field] = base64String;
+        const gridfsBucket = getGridFSBucket();
+        if (!gridfsBucket) {
+            return res.status(500).json({ error: "GridFS not initialized" });
         }
-    });
 
-    const { foto, foto1, foto2 } = base64Files;
+        // Загружаем файл в GridFS
+        const uploadToGridFS = (file) => {
+            return new Promise((resolve, reject) => {
+                if (!file) return resolve(null);
 
-    const updateFields = {
-        title,
-        content,
-        ...(foto && { foto }),
-        ...(foto1 && { foto1 }),
-        ...(foto2 && { foto2 }),
-    };
+                const stream = gridfsBucket.openUploadStream(file.originalname);
+                stream.end(file.buffer);
 
-    Collection
-        .findByIdAndUpdate(collectionId,
+                stream.on("finish", () => resolve(stream.id));
+                stream.on("error", reject);
+            });
+        };
+
+        // Загружаем новые файлы (если есть)
+        const fotoId = await uploadToGridFS(req.files.foto?.[0]);
+        const foto1Id = await uploadToGridFS(req.files.foto1?.[0]);
+        const foto2Id = await uploadToGridFS(req.files.foto2?.[0]);
+
+        // Формируем объект обновления
+        const updateFields = {
+            title,
+            content,
+        };
+
+        if (fotoId) updateFields.foto = fotoId;
+        if (foto1Id) updateFields.foto1 = foto1Id;
+        if (foto2Id) updateFields.foto2 = foto2Id;
+
+        // Обновляем документ
+        const updated = await Collection.findByIdAndUpdate(
+            collectionId,
             updateFields,
             { new: true }
-        )
-        // .then((collection) => res.render(createPath('collection'), { collection }))
+        ).populate("user");
 
-        /*     .then((collection) => res.render(createPath('collection'), {
-                title: 'My collection',
-                collection: populated,
-                userowner: populated.user || null
-            })) */
+        res.render(createPath("collection"), {
+            title: "My collection",
+            collection: updated,
+            userowner: updated.user || null
+        });
 
-
-        .then(async (collection) => {
-            const populated = await collection.populate('user'); res.render(createPath('collection'),
-                { title: 'My collection', collection: populated, userowner: populated.user || null });
-        })
-
-
-        .catch((error) => res.render(createPath('error')));
+    } catch (err) {
+        console.error(err);
+        res.render(createPath("error"));
+    }
 };
+
+//module.exports = { updatecollection };
 
 
 const getallcollection = (req, res) => {
@@ -232,8 +409,12 @@ const getgallerypage = (req, res) => {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 18;
     const skip = (page - 1) * limit;
+
+    //  console.log('£££££££££', page, limit, skip);
+
     Collection
-        .find({})
+        //    .find({})//{}, { image: 0 }
+        .find({}, { image: 0 })
         .skip(skip)
         .limit(limit)
         //.sort({ createdAt: -1 })

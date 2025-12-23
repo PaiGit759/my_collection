@@ -120,6 +120,16 @@ mongoose.connect(process.env.MONGO_URL)
   .then(() => console.log('Connected to MongoDB Atlas'))
   .catch(err => console.error('MongoDB connection error:', err));
 
+/* let gridfsBucket; mongoose.connection.once("open", () => {
+  gridfsBucket = new mongoose.mongo.GridFSBucket(mongoose.connection.db,
+    { bucketName: "uploads" }); console.log("GridFSBucket initialized");
+});
+
+module.exports = { gridfsBucket }; */
+
+//const { getGridFSBucket } = require("/Users/pai/Documents/web-projects/FullStack/NODE/my_collection/controllers/gridfs.js");
+const { getGridFSBucket } = require("./controllers/gridfs.js");
+
 app.use('/api', authRouter);
 app.use('/api', collectionRoutes);
 
@@ -143,6 +153,28 @@ app.get("/register", (req, res) => {
 app.get("/addcollection", (req, res) => {
   res.render(createPath('addcollection'), { title: 'Collection' });
 });
+
+//const mongoose = require("mongoose");
+//const { getGridFSBucket } = require("./gridfs");
+
+app.get("/image/:id", (req, res) => {
+  const gridfsBucket = getGridFSBucket();
+  if (!gridfsBucket) return res.status(500).send("GridFS not ready");
+
+  let id;
+  try {
+    id = new mongoose.Types.ObjectId(req.params.id);
+  } catch (e) {
+    return res.status(400).send("Invalid ID");
+  }
+
+  gridfsBucket
+    .openDownloadStream(id)
+    .on("error", () => res.status(404).send("File not found"))
+    .pipe(res);
+});
+
+
 
 app.get("/about", (req, res) => {
   res.render(createPath('about'), { title: 'About' });

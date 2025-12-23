@@ -22,19 +22,15 @@
 
             <div class="row text-center">
               <div class="col-12 col-md-4 mb-3">
-                <h5>Foto</h5>
-                <img src="data:image/png;base64,<%= collection.foto %>" class="img-fluid rounded">
+                <h5>Foto</h5> <img src="/image/<%= collection.foto %>" class="img-fluid rounded">
               </div>
               <div class="col-12 col-md-4 mb-3">
-                <h5>Foto1</h5>
-                <img src="data:image/png;base64,<%= collection.foto1 %>" class="img-fluid rounded">
+                <h5>Foto1</h5> <img src="/image/<%= collection.foto1 %>" class="img-fluid rounded">
               </div>
               <div class="col-12 col-md-4 mb-3">
-                <h5>Foto2</h5>
-                <img src="data:image/png;base64,<%= collection.foto2 %>" class="img-fluid rounded">
+                <h5>Foto2</h5> <img src="/image/<%= collection.foto2 %>" class="img-fluid rounded">
               </div>
             </div>
-
 
             <div class="d-flex align-items-center justify-content-center flex-wrap">
               <% if (userowner) { %>
