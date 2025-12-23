@@ -107,6 +107,8 @@ const { getallcollection, getgallerycount, getgallerypage, collection, editcolle
 const authRouter = require('./routes/authRoutes.js');
 const collectionRoutes = require('./routes/collectionRoutes.js');
 
+const { getGridFSBucket } = require("./controllers/gridfs.js");
+
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -128,7 +130,7 @@ mongoose.connect(process.env.MONGO_URL)
 module.exports = { gridfsBucket }; */
 
 //const { getGridFSBucket } = require("/Users/pai/Documents/web-projects/FullStack/NODE/my_collection/controllers/gridfs.js");
-const { getGridFSBucket } = require("./controllers/gridfs.js");
+
 
 app.use('/api', authRouter);
 app.use('/api', collectionRoutes);

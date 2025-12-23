@@ -194,6 +194,9 @@ const { getGridFSBucket } = require("./gridfs");
  */
 
 const addcollection = async (req, res) => {
+
+    console.log("GRIDFS VERSION RUNNING");
+
     try {
         const gridfsBucket = getGridFSBucket();
         if (!gridfsBucket) {
