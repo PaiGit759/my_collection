@@ -7,11 +7,19 @@ const upload = multer({ storage: storage });
 
 const router = express.Router();
 
-router.post('/addcollection', upload.fields([
-    { name: 'foto', maxCount: 1 },
-    { name: 'foto1', maxCount: 1 },
-    { name: 'foto2', maxCount: 1 }
+// router.post('/addcollection', upload.fields([
+//     { name: 'foto', maxCount: 1 },
+//     { name: 'foto1', maxCount: 1 },
+//     { name: 'foto2', maxCount: 1 }
+// ]), addcollection);
+
+
+router.post("/addcollection", upload.fields([
+    { name: "foto", maxCount: 1 },
+    { name: "foto1", maxCount: 1 },
+    { name: "foto2", maxCount: 1 }
 ]), addcollection);
+
 
 router.post('/updatecollection', upload.fields([
     { name: 'foto', maxCount: 1 },
