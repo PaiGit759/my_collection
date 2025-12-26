@@ -7,19 +7,36 @@ const collectionSchema = new mongoose.Schema({
         unique: true,
     },
 
+    /*    foto: {
+           type: String,
+           default: null,
+       },
+   
+       foto1: {
+           type: String,
+           default: null,
+       },
+       foto2: {
+           type: String,
+           default: null,
+       },
+    */
+
     foto: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
         default: null,
     },
 
     foto1: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
         default: null,
     },
+
     foto2: {
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
         default: null,
     },
+
 
     content: {
         type: String,

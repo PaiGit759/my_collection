@@ -195,7 +195,7 @@ const { getGridFSBucket } = require("./gridfs");
 
 const addcollection = async (req, res) => {
 
-    console.log("GRIDFS VERSION RUNNING");
+    //   console.log("GRIDFS VERSION RUNNING");
 
     try {
         const gridfsBucket = getGridFSBucket();
@@ -256,7 +256,7 @@ const addcollection = async (req, res) => {
 };
 
 
-const deletecollection = (req, res) => {
+/* const deletecollection = (req, res) => {
     const title = 'My collection';
     const collectionId = req.query.id;
     const page = req.query.page;
@@ -266,6 +266,51 @@ const deletecollection = (req, res) => {
         .then((collection) => res.render(createPath('index'), { title, page }))
         .catch((error) => handleError(res, error));
 };
+*/
+
+const deletecollection = async (req, res) => {
+    try {
+        const title = "My collection";
+        const collectionId = req.query.id;
+        const page = req.query.page;
+
+        const gridfsBucket = getGridFSBucket();
+        if (!gridfsBucket) {
+            return res.status(500).send("GridFS not initialized");
+        }
+
+        // Находим коллекцию, чтобы узнать ID файлов
+        const collection = await Collection.findById(collectionId);
+        if (!collection) {
+            return res.status(404).send("Collection not found");
+        }
+
+        // Функция удаления файла
+        const deleteFile = async (fileId) => {
+            if (!fileId) return;
+            try {
+                await gridfsBucket.delete(fileId);
+            } catch (err) {
+                console.error("GRIDFS DELETE ERROR:", err);
+            }
+        };
+
+        // Удаляем связанные файлы
+        await deleteFile(collection.foto);
+        await deleteFile(collection.foto1);
+        await deleteFile(collection.foto2);
+
+        // Удаляем сам документ
+        await Collection.findByIdAndDelete(collectionId);
+
+        res.render(createPath("index"), { title, page });
+
+    } catch (error) {
+        console.error("DELETE COLLECTION ERROR:", error);
+        handleError(res, error);
+    }
+};
+
 
 const editcollection = (req, res) => {
     const title = 'My collection';
@@ -276,6 +321,10 @@ const editcollection = (req, res) => {
         .then((collection) => res.render(createPath('edit-collection'), { collection }))
         .catch((error) => handleError(res, error));
 };
+
+
+
+
 
 // const updatecollection = async (req, res) => {
 
