@@ -33,12 +33,6 @@ async function fetchGalleryPage(page) {
     try {
         const res = await fetch(`/gallerypage?page=${page}&limit=${itemsPerPage}`);
         const data = await res.json();
-        /*         const pageObjects = data.map((item, i) => ({
-                    title: item.title || `${i + 1}`,
-                    img: item.foto || `https://images.unsplash.com/photo-1543466835-00a7907e9de1`,
-                    formattedDate: new Date(item.createdAt).toISOString().replace('T', ' ').slice(0, 19),
-                    id: item._id,
-                })); */
 
         const pageObjects = data.map((item, i) => ({
             title: item.title || `${i + 1}`,
@@ -46,8 +40,6 @@ async function fetchGalleryPage(page) {
             formattedDate: new Date(item.createdAt).toISOString().replace('T', ' ').slice(0, 19),
             id: item._id,
         }));
-
-
 
         renderGallery(pageObjects, page);
     } catch (err) {
@@ -59,13 +51,13 @@ async function fetchGalleryPage(page) {
 }
 
 function renderGallery(pageItems, page) {
-    // Сохраняем текущую страницу в localStorage
+    // Save the current page to localStorage
     localStorage.setItem('galleryPage', page);
 
     const gallery = document.getElementById("gallery");
     gallery.innerHTML = "";
 
-    // Добавляем заголовок с номером страницы
+    // Add a heading with a page number
     const pageHeader = document.createElement("h5");
     pageHeader.className = "text-center my-3";
     pageHeader.textContent = `Page № ${page}`;
@@ -76,16 +68,6 @@ function renderGallery(pageItems, page) {
     pageItems.forEach((obj) => {
         const col = document.createElement("div");
         col.className = "col-12 col-sm-6 col-md-3 col-lg-2";
-        /*        col.innerHTML = `
-             <div class="card h-100">
-               <img src="data:image/png;base64,${obj.img}" class="card-img-top" alt="${obj.title}" />
-               <div class="card-body text-center">
-                 <h6 class="card-title"><b>${obj.title}</b></h6>
-                 <h6 class="card-title"> № ${i + 1 + 18 * (page - 1)}(${obj.formattedDate})</h6>
-                 <a href="/collection/?id=${obj.id}" class="btn btn-primary btn-sm" onclick="localStorage.setItem('galleryPage', ${page})">Read more</a>
-               </div>
-             </div>
-           `; */
 
         col.innerHTML = `
   <div class="card h-100">
@@ -97,7 +79,6 @@ function renderGallery(pageItems, page) {
     </div>
   </div>
 `;
-
 
         gallery.appendChild(col);
 
@@ -185,8 +166,6 @@ function createPageItem(label, page, disabled, active = false) {
     li.appendChild(btn);
     return li;
 }
-
-
 
 fetchTotalCount();
 

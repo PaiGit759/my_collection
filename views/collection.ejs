@@ -44,7 +44,9 @@
                 </h5>
 
                 <% if (userowner.foto) { %>
-                  <img src="data:image/png;base64,<%= userowner.foto %>" class="img-fluid rounded"
+                  <!-- <img src="data:image/png;base64,<%= userowner.foto %>" class="img-fluid rounded"
+                    style="max-width:100px; height:auto;"> -->
+                  <img src="/user/foto/<%= userowner.foto %>" class="img-fluid rounded"
                     style="max-width:100px; height:auto;">
                   <% } %>
                     <% } else { %>

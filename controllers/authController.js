@@ -5,6 +5,8 @@ const createPath = require('../helpers/create-path.js');
 
 const fs = require('fs');
 
+const { getGridFSBucket } = require("./gridfs");
+
 const handleError = (res, error) => {
     res.status(500).send(error.message);
 }
@@ -18,73 +20,105 @@ async function readFileAsDataURL(file) {
     return result_base64;
 }
 
+const deleteFromGridFS = async (id) => {
+    if (!id) return;
+    const bucket = getGridFSBucket();
+    try {
+        await bucket.delete(id);
+    } catch (err) {
+        console.error("Error deleting file:", err);
+    }
+};
+
+const uploadToGridFS = (file) => {
+    return new Promise((resolve, reject) => {
+        if (!file) return resolve(null);
+
+        const bucket = getGridFSBucket();
+        const stream = bucket.openUploadStream(file.originalname);
+        stream.end(file.buffer);
+
+        stream.on("finish", () => resolve(stream.id));
+        stream.on("error", reject);
+    });
+};
 
 const register = async (req, res) => {
+    try {
+        const { username, firstName, lastName, email, password: pass, role } = req.body;
 
-    const { username, firstName, lastName, email, password: pass, role } = req.body;
-    let str64;
+        const exists = await User.findOne({ email });
+        if (exists) {
+            return res.render(createPath("register"), { message: "User with this email already exists" });
+        }
 
-    if (req.file) { str64 = req.file.buffer.toString("base64") }
-    else { str64 = "" };
+        const fotoId = await uploadToGridFS(req.file);
 
-    const bodystr64 = str64;
-
-
-    const message = 'User with this email already exists....';
-    const message1 = 'User with this email already exists+++++';
-
-    User
-        .findOne({ email })
-        .then((user) => {
-            if (user) {
-                if (user.email === email) {
-                    res.render(createPath('register'), { message });
-                }
-            }
-        });
-
-
-    const salt = await bcrypt.genSalt(10);
-    const hash = await bcrypt.hash(pass, salt);
-    const curuser = null;
-    const user = new User({ username, firstName, lastName, email, password: hash, role, foto: bodystr64 });
-    user
-        .save()
-        .then((user) => res.render(createPath('user'), { user }))
-        .catch(() => res.render(createPath('error'), { message1 }));
-}
-
-
-const updateuser = async (req, res) => {
-    const { username, firstName, lastName, email, password: pass, role } = req.body;
-    let str64 = req.file ? req.file.buffer.toString("base64") : "";
-
-    const updateFields = {
-        username,
-        firstName,
-        lastName,
-        email,
-        ...(str64 && { foto: str64 }),
-    };
-
-    // Only if the password is transmitted, we hash it and add it to the update.
-    if (pass && pass.trim() !== "") {
         const salt = await bcrypt.genSalt(10);
         const hash = await bcrypt.hash(pass, salt);
-        updateFields.password = hash;
+
+        const user = new User({
+            username,
+            firstName,
+            lastName,
+            email,
+            password: hash,
+            role,
+            foto: fotoId
+        });
+
+        await user.save();
+
+        res.render(createPath("user"), { user });
+
+    } catch (err) {
+        console.error(err);
+        res.render(createPath("error"));
     }
+};
 
-    const message1 = 'User with this email already exists+++++';
+const updateuser = async (req, res) => {
+    try {
+        const { username, firstName, lastName, email, password: pass, role } = req.body;
 
-    User
-        .findOneAndUpdate(
+        const user = await User.findOne({ email });
+        if (!user) return res.render(createPath("error"));
+
+        const updateFields = {
+            username,
+            firstName,
+            lastName,
+            email,
+            role
+        };
+
+        // If a new file arrives, delete the old one and upload the new one.
+        if (req.file) {
+            await deleteFromGridFS(user.foto);
+            updateFields.foto = await uploadToGridFS(req.file);
+        }
+
+        // If a new password is transmitted, we hash it.
+        if (pass && pass.trim() !== "") {
+            const salt = await bcrypt.genSalt(10);
+            updateFields.password = await bcrypt.hash(pass, salt);
+        }
+
+        const updated = await User.findOneAndUpdate(
             { email },
             updateFields,
             { new: true }
-        )
-        .then((user) => res.render(createPath('user'), { user }))
-        .catch(() => res.render(createPath('error'), { message1 }));
-}
+        );
+
+        res.render(createPath("user"), { user: updated });
+
+    } catch (err) {
+        console.error(err);
+        res.render(createPath("error"));
+    }
+};
+
+
 
 const getUsers = (req, res) => {
     const title = 'My collection';

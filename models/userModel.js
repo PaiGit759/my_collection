@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-//import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
     username: {
@@ -7,10 +6,13 @@ const userSchema = new mongoose.Schema({
         require: true,
         unique: true,
     },
-    foto: {
-        type: String,
-        default: null,
-    },
+    /*    foto: {
+           type: String,
+           default: null,
+       }, */
+
+    foto: { type: mongoose.Schema.Types.ObjectId, default: null, },
+
     firstName: {
         type: String,
         require: true,

@@ -52,21 +52,26 @@
                     <div class="col-12 col-md-4 mb-3">
                       <h5>Photo</h5>
 
-                      <img id="preview-foto" src="data:image/png;base64,<%= user.foto %>"
-                        class="img-fluid rounded mb-2">
+                      <% if (user.foto) { %>
+                        <img id="preview-foto" src="/user/foto/<%= user.foto %>" class="img-fluid rounded mb-2">
+                        <% } else { %>
+                          <img id="preview-foto" src="/image/UndefinedUser.jpg" class="img-fluid rounded mb-2">
+                          <% } %>
 
-                      <div class="d-flex align-items-center gap-2 flex-row flex-wrap" style="max-width: 100%;">
-                        <input type="file" id="input-foto" name="foto" accept="image/*" class="d-none">
+                            <div class="d-flex align-items-center gap-2 flex-row flex-wrap" style="max-width: 100%;">
+                              <input type="file" id="input-foto" name="foto" accept="image/*" class="d-none">
 
-                        <button type="button" class="btn btn-primary"
-                          onclick="document.getElementById('input-foto').click();">
-                          Upload Image
-                        </button>
+                              <button type="button" class="btn btn-primary"
+                                onclick="document.getElementById('input-foto').click();">
+                                Upload Image
+                              </button>
 
-                        <input type="text" id="file-name" class="form-control" placeholder="No file chosen" readonly
-                          style="width: auto; flex: 1 1 auto; min-width: 150px;">
-                      </div>
+                              <input type="text" id="file-name" class="form-control" placeholder="No file chosen"
+                                readonly style="width: auto; flex: 1 1 auto; min-width: 150px;">
+                            </div>
                     </div>
+
+
 
                     <button type="submit">Save changes</button>
                   </form>

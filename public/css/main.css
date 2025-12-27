@@ -146,16 +146,16 @@ h2 a {
 }
 
 .card {
-  height: 300px; /* фиксированная высота карточки */
+  height: 300px; /* fixed card height */
   display: flex;
   flex-direction: column;
   overflow: hidden;
 }
 
 .card-img-top {
-  height: 150px; /* фиксированная высота изображения */
+  height: 150px; /* fixed image height */
   width: 100%;
-  object-fit: cover; /* обрезает изображение, сохраняя пропорции */
+  object-fit: cover; /* crops the image while maintaining its aspect ratio */
 }
 
 .card-body {
@@ -167,13 +167,11 @@ h2 a {
 }
 
 .navbar {
-  background-color: #502173 !important; /* Например, фиолетовый */
+  background-color: #502173 !important;
 }
 
 .navbar .nav-link {
-  color: white !important; /* Цвет текста */
-  /* font-weight: bold; */
-  /* font-weight: 900; */
+  color: white !important; /* Text color */
   font-size: x-large;
 }
 

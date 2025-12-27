@@ -1,23 +1,30 @@
 const storedUser = localStorage.getItem('currentUser');
 const user = storedUser ? JSON.parse(storedUser) : null;
 const imgUser = document.getElementById('userfoto');
-//console.log('*********', user.role)
 
 if (user) {
-    // Устанавливаем фото пользователя
-    imgUser.src = "data:image/png;base64," + user.foto;
+    // Setting up a user photo
+    //    imgUser.src = "data:image/png;base64," + user.foto;
 
-    // Оборачиваем изображение в ссылку на профиль
+    if (user.foto) {
+        imgUser.src = `/user/foto/${user.foto}`;
+    } else {
+        imgUser.src = "/image/UndefinedUser.jpg";
+    }
+
+
+
+    // Wrap the image in a link to the profile
     const link = document.createElement('a');
     link.href = `/user?id=${user._id}`;
     link.textContent = 'Current user ';
     imgUser.parentNode.insertBefore(link, imgUser);
     link.appendChild(imgUser);
 } else {
-    // Устанавливаем изображение по умолчанию
+    // Set the default image
     imgUser.src = "/image/UndefinedUser.jpg";
 
-    // Добавляем текст "Гость" или кнопку "Войти"
+    // Add the text "Guest" or the "Login" button
     const guestInfo = document.createElement('span');
     guestInfo.style.marginTop = '10px';
     guestInfo.style.textAlign = 'center';
@@ -28,7 +35,7 @@ if (user) {
 
 
     const loginButton = document.createElement('a');
-    loginButton.href = '/login'; // предполагается, что у вас есть маршрут /login
+    loginButton.href = '/login'; // It is assumed that you have a route /login
     loginButton.textContent = 'Login';
     loginButton.style.display = 'inline-block';
     loginButton.style.padding = '6px 12px';
