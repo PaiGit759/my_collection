@@ -122,7 +122,7 @@ async function renderGallery(pageItems, page) {
         i++;
     });
 
-    // Ждём загрузки всех изображений
+    // We are waiting for all images to load.
     const images = gallery.querySelectorAll("img");
     await Promise.all(
         Array.from(images).map(img => {

@@ -44,8 +44,6 @@
                 </h5>
 
                 <% if (userowner.foto) { %>
-                  <!-- <img src="data:image/png;base64,<%= userowner.foto %>" class="img-fluid rounded"
-                    style="max-width:100px; height:auto;"> -->
                   <img src="/user/foto/<%= userowner.foto %>" class="img-fluid rounded"
                     style="max-width:100px; height:auto;">
                   <% } %>
@@ -91,6 +89,22 @@
           }
         </style>
 
+        <style>
+          .spinner-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+          }
+        </style>
+
+
         <script>
           // Go to the home page with the saved page
           function goToIndex() {
@@ -111,9 +125,8 @@
           const creatorId = '<%= collection.user ? collection.user._id : "" %>';
           const collectionId = '<%= collection._id %>';
 
-          if (user && (user.role === 'admin' || user._id === creatorId)) {
 
-            // console.log('$$$$$$$$$', user._id, creatorId);
+          if (user && (user.role === 'admin' || user._id === creatorId)) {
 
             const container = document.getElementById('actionButtons');
 
@@ -129,29 +142,39 @@
 
             container.appendChild(editBtn);
             container.appendChild(deleteBtn);
+
+            editBtn.addEventListener('click', function () {
+              document.getElementById('spinner').style.display = 'flex';
+              window.location.href = `/editcollection?id=${collection_id.value}`;
+            });
+
+            deleteBtn.addEventListener('click', function () {
+              const page = localStorage.getItem('galleryPage') || 1;
+              const isConfirmed = confirm('Are you sure you want to delete the collection?');
+
+              if (isConfirmed) {
+                document.getElementById('spinner').style.display = 'flex';
+                window.location.href = `/deletecollection?id=${collectionId}&page=${page}`;
+              } else {
+                alert('Deletion cancelled by user');
+              }
+            });
           }
+
         </script>
 
         <script>
-          document.getElementById('edit-btn').addEventListener('click', function () {
-            window.location.href = `/editcollection?id=${collection_id.value}`;
-          });
-
-          document.getElementById('delete-btn').addEventListener('click', function () {
-            const page = localStorage.getItem('galleryPage') || 1;
-            const isConfirmed = confirm('Are you sure you want to delete the collection?');
-
-            if (isConfirmed) {
-              window.location.href = `/deletecollection?id=${collectionId}&page=${page}`;
-            } else {
-              alert('Deletion cancelled by user');
-            }
-          });
+          window.onload = function () {
+            const spinner = document.getElementById('page-spinner');
+            if (spinner) spinner.style.display = 'none';
+          };
         </script>
+
+        <div id="spinner" class="spinner-overlay" style="display:none;">
+          <div class="spinner-border text-primary" role="status"></div>
+        </div>
+
 
   </body>
 
 </html>
-
-
-<script>
