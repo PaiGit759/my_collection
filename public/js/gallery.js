@@ -29,7 +29,7 @@ async function fetchTotalCount() {
 }
 
 async function fetchGalleryPage(page) {
-    showSpinner();
+    //    showSpinner();
     try {
         const res = await fetch(`/gallerypage?page=${page}&limit=${itemsPerPage}`);
         const data = await res.json();
@@ -46,11 +46,11 @@ async function fetchGalleryPage(page) {
         console.error('Ошибка загрузки страницы галереи:', err);
     }
     finally {
-        hideSpinner();
+        //        hideSpinner();
     }
 }
 
-function renderGallery(pageItems, page) {
+/* function renderGallery(pageItems, page) {
     // Save the current page to localStorage
     localStorage.setItem('galleryPage', page);
 
@@ -85,6 +85,58 @@ function renderGallery(pageItems, page) {
         i = i + 1;
     });
 }
+ */
+
+async function renderGallery(pageItems, page) {
+    showSpinner();
+
+    localStorage.setItem('galleryPage', page);
+
+    const gallery = document.getElementById("gallery");
+    gallery.innerHTML = "";
+
+    const pageHeader = document.createElement("h5");
+    pageHeader.className = "text-center my-3";
+    pageHeader.textContent = `Page № ${page}`;
+    gallery.appendChild(pageHeader);
+
+    let i = 0;
+
+    pageItems.forEach((obj) => {
+        const col = document.createElement("div");
+        col.className = "col-12 col-sm-6 col-md-3 col-lg-2";
+
+        col.innerHTML = `
+            <div class="card h-100">
+                <img src="${obj.img}" class="card-img-top" alt="${obj.title}" />
+                <div class="card-body text-center">
+                    <h6 class="card-title"><b>${obj.title}</b></h6>
+                    <h6 class="card-title"> № ${i + 1 + 18 * (page - 1)}(${obj.formattedDate})</h6>
+                    <a href="/collection/?id=${obj.id}" class="btn btn-primary btn-sm"
+                       onclick="localStorage.setItem('galleryPage', ${page})">Read more</a>
+                </div>
+            </div>
+        `;
+
+        gallery.appendChild(col);
+        i++;
+    });
+
+    // Ждём загрузки всех изображений
+    const images = gallery.querySelectorAll("img");
+    await Promise.all(
+        Array.from(images).map(img => {
+            if (img.complete) return Promise.resolve();
+            return new Promise(resolve => {
+                img.onload = img.onerror = resolve;
+            });
+        })
+    );
+
+    hideSpinner();
+}
+
+
 
 function renderPagination() {
     const totalPages = Math.ceil(totalItems / itemsPerPage);
