@@ -11,22 +11,44 @@
             <form id="editcollection" method="post" action="/api/updatecollection" enctype="multipart/form-data">
               <input type="hidden" name="collectionId" value="<%= collection._id %>">
               <input type="hidden" id="cuser" name="userId">
-
+              <!-- 
               <div class="text-center mb-4">
                 <h2>Title</h2>
                 <input type="text" class="form-control" name="title" value="<%= collection.title %>" required>
+              </div> -->
+
+
+              <div class="row mb-4">
+
+                <div class="col-12 col-md-6 mb-3">
+                  <div class="d-flex align-items-center">
+                    <span class="fw-bold me-2">Title:</span>
+                    <input type="text" name="title" class="form-control flex-grow-1" value="<%= collection.title %>"
+                      required>
+                  </div>
+                </div>
+
+                <div class="col-12 col-md-6 mb-3">
+                  <div class="d-flex align-items-center">
+                    <span class="fw-bold me-2">Group:</span>
+                    <input type="text" name="group" class="form-control flex-grow-1" value="<%= collection.group %>">
+                  </div>
+                </div>
+
               </div>
+
+
 
               <div class="text-center mb-4">
                 <h4>Content</h4>
                 <textarea class="form-control" name="content" rows="8" required><%= collection.content %></textarea>
               </div>
 
-              <div class="row text-center">
+              <!-- <div class="row text-center">
 
                 <div class="col-12 col-md-4 mb-3">
                   <h5>Foto</h5>
-                  <!-- <img id="preview-foto" src="data:image/png;base64,<%= collection.foto %>" -->
+
                   <img id="preview-foto" src="/image/<%= collection.foto %>" class="img-fluid rounded mb-2">
 
                   class="img-fluid rounded mb-2">
@@ -45,7 +67,7 @@
 
                 <div class="col-12 col-md-4 mb-3">
                   <h5>Foto1</h5>
-                  <!-- <img id="preview-foto1" src="data:image/png;base64,<%= collection.foto1 %>" -->
+
                   <img id="preview-foto1" src="/image/<%= collection.foto1 %>" class="img-fluid rounded mb-2">
 
                   class="img-fluid rounded mb-2">
@@ -65,7 +87,7 @@
 
                 <div class="col-12 col-md-4 mb-3">
                   <h5>Foto2</h5>
-                  <!-- <img id="preview-foto2" src="data:image/png;base64,<%= collection.foto2 %>" -->
+
                   <img id="preview-foto2" src="/image/<%= collection.foto2 %>" class="img-fluid rounded mb-2">
 
                   class="img-fluid rounded mb-2">
@@ -84,7 +106,72 @@
 
                 <div class="text-center mt-4">
                   <button type="submit" class="btn btn-primary">Save changes</button>
+                </div> -->
+
+
+
+
+              <div class="row text-center">
+
+                <div class="col-12 col-md-4 mb-3">
+                  <h5>Foto</h5>
+                  <img id="preview-foto" src="/image/<%= collection.foto %>" class="edit-img mb-2">
+
+                  <div class="d-flex align-items-center gap-2 flex-row flex-wrap" style="max-width: 100%;">
+                    <input type="file" name="foto" accept="image/*" id="input-foto" class="d-none">
+
+                    <button type="button" class="btn btn-primary"
+                      onclick="document.getElementById('input-foto').click();">
+                      Upload Image
+                    </button>
+
+                    <input type="text" id="file-name" class="form-control" placeholder="No file chosen" readonly
+                      style="width: auto; flex: 1 1 auto; min-width: 150px;">
+                  </div>
                 </div>
+
+                <div class="col-12 col-md-4 mb-3">
+                  <h5>Foto1</h5>
+                  <img id="preview-foto1" src="/image/<%= collection.foto1 %>" class="edit-img mb-2">
+
+                  <div class="d-flex align-items-center gap-2 flex-row flex-wrap" style="max-width: 100%;">
+                    <input type="file" name="foto1" accept="image/*" id="input-foto1" class="d-none">
+
+                    <button type="button" class="btn btn-primary"
+                      onclick="document.getElementById('input-foto1').click();">
+                      Upload Image 1
+                    </button>
+
+                    <input type="text" id="file-name1" class="form-control" placeholder="No file chosen" readonly
+                      style="width: auto; flex: 1 1 auto; min-width: 150px;">
+                  </div>
+                </div>
+
+                <div class="col-12 col-md-4 mb-3">
+                  <h5>Foto2</h5>
+                  <img id="preview-foto2" src="/image/<%= collection.foto2 %>" class="edit-img mb-2">
+
+                  <div class="d-flex align-items-center gap-2 flex-row flex-wrap" style="max-width: 100%;">
+                    <input type="file" name="foto2" accept="image/*" id="input-foto2" class="d-none">
+
+                    <button type="button" class="btn btn-primary"
+                      onclick="document.getElementById('input-foto2').click();">
+                      Upload Image 2
+                    </button>
+
+                    <input type="text" id="file-name2" class="form-control" placeholder="No file chosen" readonly
+                      style="width: auto; flex: 1 1 auto; min-width: 150px;">
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="text-center mt-4">
+                <button type="submit" class="btn btn-primary">Save changes</button>
+              </div>
+
+
+
             </form>
           </div>
         </div>
@@ -178,6 +265,15 @@
             background-color: #007bff;
             color: white;
             border-radius: 4px;
+          }
+
+
+          .edit-img {
+            width: 100%;
+            height: 350px;
+            /* можно менять: 180–250px */
+            object-fit: cover;
+            border-radius: 8px;
           }
         </style>
 

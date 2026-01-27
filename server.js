@@ -21,7 +21,6 @@ app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
 
-//app.use(express.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 mongoose.connect(process.env.MONGO_URL)
@@ -89,6 +88,10 @@ app.get("/user/foto/:id", (req, res) => {
 
 app.get("/about", (req, res) => {
   res.render(createPath('about'), { title: 'About' });
+});
+
+app.get("/sorting_selection", (req, res) => {
+  res.render(createPath('sorting_selection'), { title: 'Sorting and selection' });
 });
 
 app.get('/gallery', getallcollection);

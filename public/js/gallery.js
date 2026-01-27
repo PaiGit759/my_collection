@@ -50,43 +50,6 @@ async function fetchGalleryPage(page) {
     }
 }
 
-/* function renderGallery(pageItems, page) {
-    // Save the current page to localStorage
-    localStorage.setItem('galleryPage', page);
-
-    const gallery = document.getElementById("gallery");
-    gallery.innerHTML = "";
-
-    // Add a heading with a page number
-    const pageHeader = document.createElement("h5");
-    pageHeader.className = "text-center my-3";
-    pageHeader.textContent = `Page № ${page}`;
-    gallery.appendChild(pageHeader);
-
-    let i = 0;
-
-    pageItems.forEach((obj) => {
-        const col = document.createElement("div");
-        col.className = "col-12 col-sm-6 col-md-3 col-lg-2";
-
-        col.innerHTML = `
-  <div class="card h-100">
-    <img src="${obj.img}" class="card-img-top" alt="${obj.title}" />
-    <div class="card-body text-center">
-      <h6 class="card-title"><b>${obj.title}</b></h6>
-      <h6 class="card-title"> № ${i + 1 + 18 * (page - 1)}(${obj.formattedDate})</h6>
-      <a href="/collection/?id=${obj.id}" class="btn btn-primary btn-sm" onclick="localStorage.setItem('galleryPage', ${page})">Read more</a>
-    </div>
-  </div>
-`;
-
-        gallery.appendChild(col);
-
-        i = i + 1;
-    });
-}
- */
-
 async function renderGallery(pageItems, page) {
     showSpinner();
 

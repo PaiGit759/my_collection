@@ -7,6 +7,12 @@ const collectionSchema = new mongoose.Schema({
         unique: true,
     },
 
+    group: {
+        type: String,
+        default: ""
+    },
+
+
     /*    foto: {
            type: String,
            default: null,

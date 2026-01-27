@@ -32,7 +32,7 @@ const addcollection = async (req, res) => {
         const foto2Id = await uploadToGridFS(req.files.foto2?.[0]);
 
         // We extract data from the form
-        const { title, content, cuser } = req.body;
+        const { title, content, cuser, group } = req.body;
 
         // Finding a user
         const user = await User.findById(cuser);
@@ -42,6 +42,7 @@ const addcollection = async (req, res) => {
         const collection = await Collection.create({
             title,
             content,
+            group,
             foto: fotoId,
             foto1: foto1Id,
             foto2: foto2Id,
@@ -134,7 +135,7 @@ const deleteFromGridFS = async (id) => {
 
 const updatecollection = async (req, res) => {
     try {
-        const { collectionId, title, content } = req.body;
+        const { collectionId, title, content, group } = req.body;
 
         const gridfsBucket = getGridFSBucket();
         if (!gridfsBucket) {
@@ -156,7 +157,7 @@ const updatecollection = async (req, res) => {
             });
         };
 
-        const updateFields = { title, content };
+        const updateFields = { title, content, group };
 
         // FOTO
         if (req.files.foto?.[0]) {
