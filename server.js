@@ -90,7 +90,7 @@ app.get("/about", (req, res) => {
   res.render(createPath('about'), { title: 'About' });
 });
 
-app.get("/sorting_selection", (req, res) => {
+app.get("/sortingselection", (req, res) => {
   // console.log('*********');
   res.render(createPath('sortingselection'), { title: 'Sorting and selection' });
 });
