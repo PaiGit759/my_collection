@@ -12,6 +12,9 @@ const collectionRoutes = require('./routes/collectionRoutes.js');
 
 const { getGridFSBucket } = require("./controllers/gridfs.js");
 
+const User = require('./models/userModel.js');
+
+
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -90,10 +93,31 @@ app.get("/about", (req, res) => {
   res.render(createPath('about'), { title: 'About' });
 });
 
-app.get("/sortingselection", (req, res) => {
+/* app.get("/sortingselection", (req, res) => {
   // console.log('*********');
   res.render(createPath('sortingselection'), { title: 'Sorting and selection' });
+}); */
+
+app.get('/sortingselection', async (req, res) => {
+  const users = await User.find({}, { username: 1 }).sort({ createdAt: -1 });
+  res.render('sortingselection', { users });
 });
+
+app.get('/gallery/count', async (req, res) => {
+  const filter = {};
+
+  if (req.query.group) filter.group = req.query.group;
+  if (req.query.user) filter.user = req.query.user;
+
+  try {
+    const count = await Collection.countDocuments(filter);
+    res.json({ count });
+  } catch (err) {
+    res.status(500).json({ error: 'Count error' });
+  }
+});
+
+
 
 app.get('/gallery', getallcollection);
 app.get('/gallery/count', getgallerycount);

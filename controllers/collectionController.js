@@ -212,7 +212,10 @@ const getgallerycount = (req, res) => {
 };
 
 
-const getgallerypage = (req, res) => {
+/* const getgallerypage = (req, res) => {
+
+    console.log("QUERY:", req.query);
+
 
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 18;
@@ -227,6 +230,46 @@ const getgallerypage = (req, res) => {
         .then((items) => res.json(items))
         .catch((error) => handleError(res, error));
 };
+ */
+
+const getgallerypage = async (req, res) => {
+    console.log("QUERY:", req.query);
+
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 18;
+    const skip = (page - 1) * limit;
+
+    // сортировка
+    const sortOrder = req.query.sort === 'desc' ? -1 : 1;
+
+    // фильтры
+    const filter = {};
+
+    if (req.query.group) {
+        filter.group = req.query.group;
+    }
+
+    if (req.query.user) {
+        filter.user = req.query.user;
+    }
+
+    console.log("APPLIED FILTER:", filter, "SORT:", sortOrder);
+
+    try {
+        const items = await Collection
+            .find(filter, { image: 0 })
+            .skip(skip)
+            .limit(limit)
+            .sort({ createdAt: sortOrder });
+
+        res.json(items);
+
+    } catch (error) {
+        handleError(res, error);
+    }
+};
+
+
 
 const collection = async (req, res) => {
     const title = 'My collection';

@@ -3,6 +3,7 @@ const pagesPerGroup = 5;
 let currentPage = 1;
 let totalItems = 0;
 
+
 function showSpinner() {
     document.getElementById("spinner").style.display = "block";
 }
@@ -10,6 +11,22 @@ function showSpinner() {
 function hideSpinner() {
     document.getElementById("spinner").style.display = "none";
 }
+
+/* async function fetchTotalCount() {
+    try {
+        const res = await fetch('/gallery/count');
+        const data = await res.json();
+        totalItems = data.count;
+        renderPagination();
+
+        const params = new URLSearchParams(window.location.search);
+        currentPage = parseInt(params.get("page")) || 1;
+
+        fetchGalleryPage(currentPage);
+    } catch (err) {
+        console.error('Error getting number of objects:', err);
+    }
+} */
 
 async function fetchTotalCount() {
     try {
@@ -20,7 +37,8 @@ async function fetchTotalCount() {
 
         totalItems = data.count;
 
-        currentPage = parseInt(params.get("page")) || 1;
+        const urlParams = new URLSearchParams(window.location.search);
+        currentPage = parseInt(urlParams.get("page")) || 1;
 
         renderPagination();
         fetchGalleryPage(currentPage);
@@ -29,6 +47,30 @@ async function fetchTotalCount() {
         console.error('Error getting number of objects:', err);
     }
 }
+
+
+/* async function fetchGalleryPage(page) {
+    //    showSpinner();
+    try {
+        const res = await fetch(`/gallerypage?page=${page}&limit=${itemsPerPage}`);
+        const data = await res.json();
+
+        const pageObjects = data.map((item, i) => ({
+            title: item.title || `${i + 1}`,
+            img: item.foto ? `/image/${item.foto}` : `https://images.unsplash.com/photo-1543466835-00a7907e9de1`,
+            formattedDate: new Date(item.createdAt).toISOString().replace('T', ' ').slice(0, 19),
+            id: item._id,
+        }));
+
+        renderGallery(pageObjects, page);
+    } catch (err) {
+        console.error('Ошибка загрузки страницы галереи:', err);
+    }
+    finally {
+        //        hideSpinner();
+    }
+}
+ */
 
 async function fetchGalleryPage(page) {
     try {
@@ -53,6 +95,8 @@ async function fetchGalleryPage(page) {
         console.error('Ошибка загрузки страницы галереи:', err);
     }
 }
+
+
 
 async function renderGallery(pageItems, page) {
     showSpinner();
@@ -89,6 +133,7 @@ async function renderGallery(pageItems, page) {
         i++;
     });
 
+    // We are waiting for all images to load.
     const images = gallery.querySelectorAll("img");
     await Promise.all(
         Array.from(images).map(img => {
@@ -102,6 +147,80 @@ async function renderGallery(pageItems, page) {
     hideSpinner();
 }
 
+
+
+function renderPagination() {
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+    const pagination = document.getElementById("pagination");
+    pagination.innerHTML = "";
+
+    const groupIndex = Math.floor((currentPage - 1) / pagesPerGroup);
+    const start = groupIndex * pagesPerGroup + 1;
+    const end = Math.min(start + pagesPerGroup - 1, totalPages);
+
+    pagination.appendChild(createPageItem("<<", 1, currentPage === 1));
+    pagination.appendChild(createPageItem("<", start - 1, start === 1));
+
+    for (let i = start; i <= end; i++) {
+        const li = createPageItem(i, i, false, i === currentPage);
+        pagination.appendChild(li);
+    }
+
+    pagination.appendChild(createPageItem(">", end + 1, end === totalPages));
+    pagination.appendChild(createPageItem(">>", totalPages, currentPage === totalPages));
+}
+
+/* function createPageItem(label, page, disabled, active = false) {
+
+    const li = document.createElement("li");
+    li.className = `page-item ${disabled ? "disabled" : ""}`;
+    const btn = document.createElement("button");
+    btn.className = `page-link page-btn ${active ? "active" : ""}`;
+
+    btn.textContent = label;
+    btn.onclick = () => {
+        if (!disabled) {
+            currentPage = page;
+
+            fetchGalleryPage(currentPage);
+            renderPagination();
+        }
+    };
+    li.appendChild(btn);
+    return li;
+}
+ */
+
+
+function createPageItem(label, page, disabled, active = false) {
+    const li = document.createElement("li");
+    li.className = `page-item ${disabled ? "disabled" : ""}`;
+
+    const btn = document.createElement("button");
+    btn.className = `page-link page-btn ${active ? "active" : ""}`;
+    btn.textContent = label;
+
+    btn.onclick = () => {
+        if (!disabled) {
+            const params = new URLSearchParams(window.location.search);
+            params.set("page", page);
+
+            currentPage = page;
+
+            history.replaceState(null, "", `?${params.toString()}`);
+
+            fetchGalleryPage(currentPage);
+            renderPagination();
+        }
+    };
+
+    li.appendChild(btn);
+    return li;
+}
+
+
+
+fetchTotalCount();
 function renderPagination() {
     const totalPages = Math.ceil(totalItems / itemsPerPage);
     const pagination = document.getElementById("pagination");
@@ -126,25 +245,17 @@ function renderPagination() {
 function createPageItem(label, page, disabled, active = false) {
     const li = document.createElement("li");
     li.className = `page-item ${disabled ? "disabled" : ""}`;
-
     const btn = document.createElement("button");
     btn.className = `page-link page-btn ${active ? "active" : ""}`;
-    btn.textContent = label;
 
+    btn.textContent = label;
     btn.onclick = () => {
         if (!disabled) {
-            const params = new URLSearchParams(window.location.search);
-            params.set("page", page);
-
             currentPage = page;
-
-            history.replaceState(null, "", `?${params.toString()}`);
-
             fetchGalleryPage(currentPage);
             renderPagination();
         }
     };
-
     li.appendChild(btn);
     return li;
 }

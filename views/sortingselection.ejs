@@ -1,3 +1,75 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<%- include('./partials/head.ejs') %>
+
+  <body class="home">
+    <%- include('./partials/nav.ejs') %>
+
+      <div class="container mt-4">
+
+        <div class="row">
+
+ 
+          <div class="col-md-3 border-end">
+            <h5>Sorting</h5>
+
+            <form id="filterForm">
+
+              <div class="mb-3">
+                <label class="form-label">Sort by date</label>
+
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="sort" value="asc" checked>
+                  <label class="form-check-label">Ascending</label>
+                </div>
+
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="sort" value="desc">
+                  <label class="form-check-label">Descending</label>
+                </div>
+              </div>
+          </div>
+
+  
+          <div class="col-md-9">
+            <h5>Filters</h5>
+
+            <div class="row">
+
+  
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Group</label>
+                <input type="text" class="form-control" name="group">
+              </div>
+
+
+              <div class="col-md-6 mb-3"> <label class="form-label">User</label>
+                <select class="form-select" name="user" id="userSelect">
+                  <option value="">All users</option>
+
+                </select>
+              </div>
+
+
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-2">Apply</button>
+
+            </form>
+          </div>
+
+        </div>
+      </div>
+
+      <%- include('./partials/footer.ejs') %>
+
+        <script src="/js/userfoto.js"></script>
+        <script src="/js/filters.js"></script>
+
+  </body>
+
+</html> -->
+
 <!DOCTYPE html>
 <html lang="en">
 <%- include('./partials/head.ejs') %>
@@ -5,40 +77,72 @@
   <body class="home">
     <%- include('./partials/nav.ejs') %>
 
-      <div> Sorting and selection </div>
+      <div class="container mt-4">
 
+        <h3 class="mb-4">Sorting and Selection</h3>
+
+        <div class="row">
+
+          <!-- LEFT: Sorting -->
+          <div class="col-md-3 border-end">
+            <h5>Sorting</h5>
+
+            <form id="filterForm">
+
+              <div class="mb-3">
+                <label class="form-label">Sort by date</label>
+
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="sort" value="asc" checked>
+                  <label class="form-check-label">Ascending</label>
+                </div>
+
+                <div class="form-check">
+                  <input class="form-check-input" type="radio" name="sort" value="desc">
+                  <label class="form-check-label">Descending</label>
+                </div>
+              </div>
+          </div>
+
+          <!-- RIGHT: Filters -->
+          <div class="col-md-9">
+            <h5>Filters</h5>
+
+            <div class="row">
+
+              <!-- Group filter -->
+              <div class="col-md-6 mb-3">
+                <label class="form-label">Group</label>
+                <input type="text" class="form-control" name="group">
+              </div>
+
+              <!-- User filter -->
+              <div class="col-md-6 mb-3">
+                <label class="form-label">User</label>
+                <select class="form-select" name="user">
+                  <option value="">All users</option>
+
+                  <% users.forEach(u=> { %>
+                    <option value="<%= u._id %>">
+                      <%= u.username %>
+                    </option>
+                    <% }) %>
+                </select>
+              </div>
+
+            </div>
+
+            <button type="submit" class="btn btn-primary mt-2">Apply</button>
+
+            </form>
+          </div>
+
+        </div>
+      </div>
 
       <%- include('./partials/footer.ejs') %>
 
-
-        <script src="/js/userfoto.js"></script>
-
-        <style>
-          .home {
-            display: flex;
-            min-height: 100vh;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
-            font-size: 12px;
-            background-color: #cfe7ed;
-            color: black;
-            padding-top: 0;
-          }
-
-          .profile-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin: 20px;
-            padding: 30px;
-            background-color: #fff;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-          }
-        </style>
-
+        <script src="/js/filters.js"></script>
 
   </body>
 

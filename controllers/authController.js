@@ -120,14 +120,32 @@ const updateuser = async (req, res) => {
 
 
 
-const getUsers = (req, res) => {
+/* const getUsers = (req, res) => {
     const title = 'My collection';
 
     User
         .find()
         .sort({ createdAt: -1 })
         .catch((error) => handleError(res, error));
+}; */
+
+
+const getUsers = async (req, res) => {
+    try {
+        const users = await User
+            .find({}, { username: 1 })   // только нужные поля
+            .sort({ createdAt: -1 });
+        console.log('*********')
+        res.render('sortingselection', {
+            title: 'My collection',
+            users
+        });
+
+    } catch (error) {
+        handleError(res, error);
+    }
 };
+
 
 const user = (req, res) => {
     const title = 'My collection';
