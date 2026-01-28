@@ -92,7 +92,7 @@ app.get("/about", (req, res) => {
 
 app.get("/sorting_selection", (req, res) => {
   // console.log('*********');
-  res.render(createPath('sorting_selection'), { title: 'Sorting and selection' });
+  res.render(createPath('sortingselection'), { title: 'Sorting and selection' });
 });
 
 app.get('/gallery', getallcollection);
