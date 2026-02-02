@@ -233,7 +233,7 @@ const getgallerycount = (req, res) => {
  */
 
 const getgallerypage = async (req, res) => {
-    console.log("QUERY:", req.query);
+    //   console.log("QUERY:", req.query);
 
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 18;
@@ -253,7 +253,7 @@ const getgallerypage = async (req, res) => {
         filter.user = req.query.user;
     }
 
-    console.log("APPLIED FILTER:", filter, "SORT:", sortOrder);
+    //console.log("APPLIED FILTER:", filter, "SORT:", sortOrder);
 
     try {
         const items = await Collection

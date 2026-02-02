@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('./partials/head.ejs') %>
+
+  <body class="home">
+    <%- include('./partials/nav.ejs') %>
+
+      <form id="editcollection" method="post" action="/api/updatecollection" enctype="multipart/form-data">
+
+        <input type="hidden" name="collectionId" value="<%= collection._id %>">
+        <input type="hidden" id="cuser" name="userId">
+
+        <!-- ВЕРХНИЙ КОНТЕЙНЕР -->
+        <div class="container py-5">
+          <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-10">
+
+              <!-- TITLE + GROUP -->
+              <div class="row mb-4">
+
+                <div class="col-12 col-md-6 mb-3">
+                  <div class="d-flex align-items-center">
+                    <span class="fw-bold me-2">Title:</span>
+                    <input type="text" name="title" class="form-control flex-grow-1" value="<%= collection.title %>"
+                      required>
+                  </div>
+                </div>
+
+                <div class="col-12 col-md-6 mb-3">
+                  <div class="d-flex align-items-center">
+                    <span class="fw-bold me-2">Group:</span>
+                    <input type="text" name="group" class="form-control flex-grow-1" value="<%= collection.group %>">
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- CONTENT -->
+              <div class="text-center mb-4">
+                <h4>Content</h4>
+                <textarea class="form-control" name="content" rows="8" required><%= collection.content %></textarea>
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <!-- БЛОК ФОТО (ВИЗУАЛЬНО ВНЕ КОНТЕЙНЕРА, НО ВНУТРИ ФОРМЫ) -->
+        <div class="photo-wrapper">
+          <div class="row text-center">
+
+            <!-- FOTO -->
+            <div class="col-12 col-md-4 mb-3">
+              <h5>Foto</h5>
+              <img id="preview-foto" src="/image/<%= collection.foto %>" class="gallery-img mb-2">
+
+              <input type="file" name="foto" accept="image/*" id="input-foto" class="d-none">
+
+              <div class="d-flex align-items-center gap-2 flex-row flex-wrap justify-content-center">
+                <button type="button" class="btn btn-primary" onclick="document.getElementById('input-foto').click();">
+                  Upload
+                </button>
+
+                <input type="text" id="file-name" class="form-control" placeholder="No file chosen" readonly
+                  style="width: auto; flex: 1 1 auto; min-width: 150px; max-width: 250px;">
+              </div>
+            </div>
+
+            <!-- FOTO1 -->
+            <div class="col-12 col-md-4 mb-3">
+              <h5>Foto1</h5>
+              <img id="preview-foto1" src="/image/<%= collection.foto1 %>" class="gallery-img mb-2">
+
+              <input type="file" name="foto1" accept="image/*" id="input-foto1" class="d-none">
+
+              <div class="d-flex align-items-center gap-2 flex-row flex-wrap justify-content-center">
+                <button type="button" class="btn btn-primary" onclick="document.getElementById('input-foto1').click();">
+                  Upload
+                </button>
+
+                <input type="text" id="file-name1" class="form-control" placeholder="No file chosen" readonly
+                  style="width: auto; flex: 1 1 auto; min-width: 150px; max-width: 250px;">
+              </div>
+            </div>
+
+            <!-- FOTO2 -->
+            <div class="col-12 col-md-4 mb-3">
+              <h5>Foto2</h5>
+              <img id="preview-foto2" src="/image/<%= collection.foto2 %>" class="gallery-img mb-2">
+
+              <input type="file" name="foto2" accept="image/*" id="input-foto2" class="d-none">
+
+              <div class="d-flex align-items-center gap-2 flex-row flex-wrap justify-content-center">
+                <button type="button" class="btn btn-primary" onclick="document.getElementById('input-foto2').click();">
+                  Upload
+                </button>
+
+                <input type="text" id="file-name2" class="form-control" placeholder="No file chosen" readonly
+                  style="width: auto; flex: 1 1 auto; min-width: 150px; max-width: 250px;">
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- КНОПКИ СОХРАНЕНИЯ -->
+
+        <!-- ДЛЯ БОЛЬШИХ ЭКРАНОВ -->
+        <div class="container text-center my-4 d-none d-md-block">
+          <button type="submit" class="btn btn-primary">Save changes</button>
+        </div>
+
+        <!-- ДЛЯ МОБИЛЬНЫХ -->
+        <button type="submit" class="btn btn-primary save-fixed d-md-none">
+          Save changes
+        </button>
+
+      </form>
+
+      <%- include('./partials/footer.ejs') %>
+
+        <!-- PREVIEW SCRIPT -->
+        <script>
+          function previewImage(inputId, previewId, nameId) {
+            const input = document.getElementById(inputId);
+            const preview = document.getElementById(previewId);
+            const nameField = document.getElementById(nameId);
+
+            input.addEventListener('change', () => {
+              const file = input.files[0];
+
+              if (file) {
+                nameField.value = file.name;
+
+                const reader = new FileReader();
+                reader.onload = e => {
+                  preview.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+              } else {
+                nameField.value = 'No file chosen';
+              }
+            });
+          }
+
+          previewImage('input-foto', 'preview-foto', 'file-name');
+          previewImage('input-foto1', 'preview-foto1', 'file-name1');
+          previewImage('input-foto2', 'preview-foto2', 'file-name2');
+        </script>
+
+        <!-- USER ID -->
+        <script>
+          document.addEventListener('DOMContentLoaded', () => {
+            const storedUser = localStorage.getItem('currentUser');
+            const userId = storedUser ? JSON.parse(storedUser) : null;
+
+            if (userId) {
+              document.getElementById('cuser').value = userId._id;
+            } else {
+              alert('Please log in or register to continue.');
+              window.location.href = '/';
+            }
+          });
+        </script>
+
+        <!-- СТИЛИ -->
+        <style>
+          .home {
+            display: flex;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            font-size: 12px;
+            background-color: #cfe7ed;
+            color: black;
+            padding-top: 0;
+          }
+
+          /* Фото как на странице просмотра */
+          .gallery-img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 8px;
+          }
+
+          /* Визуально вынести блок фото за контейнер */
+          .photo-wrapper {
+            width: 100vw;
+            position: relative;
+            left: 50%;
+            right: 50%;
+            margin-left: -50vw;
+            margin-right: -50vw;
+            padding: 0 15px;
+          }
+
+          /* Фиксированная кнопка на мобильных */
+          @media (max-width: 576px) {
+            .save-fixed {
+              position: fixed;
+              bottom: 15px;
+              left: 50%;
+              transform: translateX(-50%);
+              z-index: 9999;
+              width: 90%;
+            }
+
+            /* Чтобы форма не пряталась под кнопкой */
+            form {
+              padding-bottom: 120px;
+            }
+          }
+        </style>
+
+  </body>
+
+</html>

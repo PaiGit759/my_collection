@@ -8,13 +8,6 @@
       <div class="container py-5">
         <div class="row justify-content-center">
           <div class="col-lg-8 col-md-10">
-            <!-- <div class="text-center mb-4">
-              <h2>Title</h2>
-              <p>
-                <%= collection.title %>
-              </p>
-            </div> -->
-
 
             <div class="row mb-4">
 
@@ -36,72 +29,58 @@
                 </div>
               </div>
 
-
-
             </div>
-
-
-
 
             <div class="text-center mb-4">
               <h4>Content</h4>
               <textarea class="form-control" rows="8"><%= collection.content %></textarea>
             </div>
 
-            <div class="row text-center">
-              <div class="col-12 col-md-4 mb-3">
-                <h5>Foto</h5> <img src="/image/<%= collection.foto %>" class="gallery-img">
-              </div>
-              <div class="col-12 col-md-4 mb-3">
-                <h5>Foto1</h5> <img src="/image/<%= collection.foto1 %>" class="gallery-img">
-              </div>
-              <div class="col-12 col-md-4 mb-3">
-                <h5>Foto2</h5> <img src="/image/<%= collection.foto2 %>" class="gallery-img">
-              </div>
-            </div>
-
-
-            <!-- class="gallery-img" class="img-fluid rounded" -->
-
-            <div class="d-flex align-items-center justify-content-center flex-wrap">
-              <% if (userowner) { %>
-                <h5 class="me-3 mb-0">
-                  Owner
-                  <b>
-                    <%= userowner.firstName || '' %>
-                      <%= userowner.lastName || '' %>
-                  </b>
-                  ( <%= userowner.email || '' %>)
-                </h5>
-
-                <% if (userowner.foto) { %>
-                  <img src="/user/foto/<%= userowner.foto %>" class="img-fluid rounded"
-                    style="max-width:100px; height:auto;">
-                  <% } %>
-                    <% } else { %>
-                      <h5 class="mb-0">Owner: Unknown</h5>
-                      <% } %>
-            </div>
-
           </div>
         </div>
-        <!-- 
-        <div class="text-center my-4">
-          <button class="btn btn-success" onclick="goToIndex()">Return</button>
-        </div>
-
-        <div id="actionButtons" class="text-center my-4"></div> -->
-
-        <div class="d-flex justify-content-center gap-3 flex-wrap my-4">
-          <button class="btn btn-success" onclick="goToIndex()">Return</button>
-          <div id="actionButtons"></div>
-        </div>
-
-
 
       </div>
 
+      <div class="row text-center">
+        <div class="col-12 col-md-4 mb-3">
+          <h5>Foto</h5> <img src="/image/<%= collection.foto %>" class="gallery-img">
+        </div>
+        <div class="col-12 col-md-4 mb-3">
+          <h5>Foto1</h5> <img src="/image/<%= collection.foto1 %>" class="gallery-img">
+        </div>
+        <div class="col-12 col-md-4 mb-3">
+          <h5>Foto2</h5> <img src="/image/<%= collection.foto2 %>" class="gallery-img">
+        </div>
+      </div>
+
+      <div class="d-flex align-items-center justify-content-center flex-wrap">
+        <% if (userowner) { %>
+          <h5 class="me-3 mb-0">
+            Owner
+            <b>
+              <%= userowner.firstName || '' %>
+                <%= userowner.lastName || '' %>
+            </b>
+            ( <%= userowner.email || '' %>)
+          </h5>
+
+          <% if (userowner.foto) { %>
+            <img src="/user/foto/<%= userowner.foto %>" class="img-fluid rounded" style="max-width:100px; height:auto;">
+            <% } %>
+              <% } else { %>
+                <h5 class="mb-0">Owner: Unknown</h5>
+                <% } %>
+      </div>
+
+      <div class="d-flex justify-content-center gap-3 flex-wrap my-4">
+        <button class="btn btn-success" onclick="goToIndex()">Return</button>
+        <div id="actionButtons"></div>
+      </div>
+
+
       <input type="hidden" id="collection_id" value="<%= collection.id %>">
+
+      <div style="height: 80px;"></div>
 
       <%- include('./partials/footer.ejs') %>
 
@@ -129,7 +108,6 @@
           .gallery-img {
             width: 100%;
             height: 350px;
-            /* можно 180–250px */
             object-fit: cover;
             border-radius: 8px;
           }
