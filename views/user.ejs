@@ -44,7 +44,6 @@
 
 
               <div class="foto-block mb-4">Foto
-                <!-- <img src="data:image/png;base64,<%= user.foto %>" width="20%" height="20%" object-fit="cover"> -->
 
                 <div class="foto-block mb-4">
                   Foto
@@ -54,8 +53,6 @@
                       <img src="/image/UndefinedUser.jpg" width="20%" height="20%" style="object-fit: cover;">
                       <% } %>
                 </div>
-
-
 
               </div>
 
@@ -85,9 +82,23 @@
 
           function goToIndex() {
             const page = localStorage.getItem('galleryPage') || 1;
-            localStorage.removeItem('galleryPage');
-            window.location.href = `/?page=${page}`;
+
+            const saved = localStorage.getItem('galleryFilters');
+            const params = new URLSearchParams();
+
+            params.append('page', page);
+
+            if (saved) {
+              const { sort, group, user } = JSON.parse(saved);
+
+              if (sort) params.append('sort', sort);
+              if (group) params.append('group', group);
+              if (user) params.append('user', user);
+            }
+
+            window.location.href = `/?${params.toString()}`;
           }
+
 
           document.getElementById('logout-btn').addEventListener('click', function () {
             localStorage.removeItem('currentUser');
@@ -151,6 +162,7 @@
 
         <script src="/js/userfoto.js"></script>
         <script src="/js/gallery.js"></script>
+
   </body>
 
 </html>

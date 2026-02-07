@@ -93,11 +93,6 @@ app.get("/about", (req, res) => {
   res.render(createPath('about'), { title: 'About' });
 });
 
-/* app.get("/sortingselection", (req, res) => {
-  // console.log('*********');
-  res.render(createPath('sortingselection'), { title: 'Sorting and selection' });
-}); */
-
 app.get('/sortingselection', async (req, res) => {
   const users = await User.find({}, { username: 1 }).sort({ createdAt: -1 });
   res.render('sortingselection', { users });
