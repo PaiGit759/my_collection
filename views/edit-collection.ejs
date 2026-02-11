@@ -91,9 +91,11 @@
 
               </div>
 
-              <div class="text-center mt-4">
+              <div class="d-flex justify-content-center gap-3 flex-wrap my-4">
+                <button type="button" class="btn btn-success" onclick="goToIndex()">Return</button>
                 <button type="submit" class="btn btn-primary">Save changes</button>
               </div>
+
 
               <div style="height: 80px;"></div>
 
@@ -108,6 +110,25 @@
         <script src="/js/userfoto.js"></script>
 
         <script>
+
+          function goToIndex() {
+            const page = localStorage.getItem('galleryPage') || 1;
+
+            const saved = localStorage.getItem('galleryFilters');
+            const params = new URLSearchParams();
+
+            params.append('page', page);
+
+            if (saved) {
+              const { sort, group, user } = JSON.parse(saved);
+
+              if (sort) params.append('sort', sort);
+              if (group) params.append('group', group);
+              if (user) params.append('user', user);
+            }
+
+            window.location.href = `/?${params.toString()}`;
+          }
 
           const fileInput = document.getElementById('input-foto');
           const fileNameDisplay = document.getElementById('file-name');
