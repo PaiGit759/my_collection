@@ -106,6 +106,26 @@
 
       <input type="hidden" id="collection-id" name="collectionId" value="<%= collection.id %>">
 
+      <div id="spinner" class="spinner-overlay" style="display:none;">
+        <div class="spinner-border text-primary" role="status"></div>
+      </div>
+
+      <style>
+        .spinner-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(255, 255, 255, 0.7);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 9999;
+        }
+      </style>
+
+
       <%- include('./partials/footer.ejs') %>
         <script src="/js/userfoto.js"></script>
 
@@ -195,6 +215,9 @@
 
         </script>
 
+
+
+
         <style>
           .custom-file-upload {
             display: inline-block;
@@ -240,6 +263,24 @@
           }
         </style>
 
+
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            const form = document.getElementById("editcollection");
+
+            form.addEventListener("submit", () => {
+              // показываем спиннер
+              document.getElementById("spinner").style.display = "flex";
+
+              // блокируем кнопку, чтобы не нажали повторно
+              const submitBtn = form.querySelector('input[type="submit"]');
+              if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.value = "Submitting...";
+              }
+            });
+          });
+        </script>
 
 
   </body>
