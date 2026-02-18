@@ -204,12 +204,37 @@ const getallcollection = (req, res) => {
         .catch((error) => handleError(res, error));
 };
 
-const getgallerycount = (req, res) => {
+/* const getgallerycount = (req, res) => {
     Collection
         .countDocuments({})
         .then((count) => res.json({ count }))
         .catch((error) => handleError(res, error));
+}; */
+
+const getgallerycount = async (req, res) => {
+
+    console.log("USER PARAM =", req.query.user);
+    try {
+        const filter = {};
+
+        if (req.query.group) {
+            filter.group = req.query.group;
+        }
+
+        if (req.query.user) {
+            // ВАЖНО: приводим к ObjectId
+            filter.user = new mongoose.Types.ObjectId(req.query.user);
+        }
+
+        const count = await Collection.countDocuments(filter);
+
+        res.json({ count });
+    } catch (error) {
+        console.error("Count error:", error);
+        res.status(500).json({ error: "Count error" });
+    }
 };
+
 
 const getgallerypage = async (req, res) => {
 
@@ -231,11 +256,18 @@ const getgallerypage = async (req, res) => {
         filter.user = req.query.user;
     }
     try {
+        /*        const items = await Collection
+                   .find(filter, { image: 0 })
+                   .skip(skip)
+                   .limit(limit)
+                   .sort({ createdAt: sortOrder }); */
+
         const items = await Collection
             .find(filter, { image: 0 })
-            .skip(skip)
-            .limit(limit)
-            .sort({ createdAt: sortOrder });
+            .sort({ createdAt: sortOrder })   // СНАЧАЛА сортировка
+            .skip(skip)                       // потом пропуск
+            .limit(limit);                    // потом ограничение
+
 
         res.json(items);
 

@@ -1,5 +1,6 @@
 const itemsPerPage = 18;
 const pagesPerGroup = 5;
+
 let currentPage = 1;
 let totalItems = 0;
 
@@ -11,6 +12,9 @@ function hideSpinner() {
     document.getElementById("spinner").style.display = "none";
 }
 
+/* --------------------------
+   1. Загружаем количество
+--------------------------- */
 async function fetchTotalCount() {
     try {
         const params = new URLSearchParams(window.location.search);
@@ -19,16 +23,20 @@ async function fetchTotalCount() {
         const data = await res.json();
 
         totalItems = data.count;
+
         currentPage = parseInt(params.get("page")) || 1;
 
         renderPagination();
         fetchGalleryPage(currentPage);
 
     } catch (err) {
-        console.error('Error getting number of objects:', err);
+        console.error("Error getting number of objects:", err);
     }
 }
 
+/* --------------------------
+   2. Загружаем страницу
+--------------------------- */
 async function fetchGalleryPage(page) {
     try {
         const params = new URLSearchParams(window.location.search);
@@ -49,12 +57,20 @@ async function fetchGalleryPage(page) {
         renderGallery(pageObjects, page);
 
     } catch (err) {
-        console.error('Ошибка загрузки страницы галереи:', err);
+        console.error("Ошибка загрузки страницы галереи:", err);
     }
 }
 
+/* --------------------------
+   3. Рендер галереи
+--------------------------- */
 async function renderGallery(pageItems, page) {
     showSpinner();
+
+    // сохраняем параметры для возврата
+    const params = new URLSearchParams(window.location.search);
+    params.set("page", page);
+    localStorage.setItem("returnParams", params.toString());
 
     const gallery = document.getElementById("gallery");
     gallery.innerHTML = "";
@@ -78,7 +94,7 @@ async function renderGallery(pageItems, page) {
                     <h6 class="card-title"> № ${i + 1 + 18 * (page - 1)} (${obj.formattedDate})</h6>
 
                     <button class="btn btn-primary btn-sm"
-                        onclick="openCollection('${obj.id}', ${page})">
+                        onclick="openCollection('${obj.id}')">
                         Read more
                     </button>
                 </div>
@@ -102,17 +118,17 @@ async function renderGallery(pageItems, page) {
     hideSpinner();
 }
 
-// Сохраняем параметры ТОЛЬКО при клике "Read more"
-function openCollection(id, page) {
-    const params = new URLSearchParams(window.location.search);
-    params.set("page", page);
-
-    // сохраняем все текущие параметры + актуальную страницу
-    localStorage.setItem("returnParams", params.toString());
-
+/* --------------------------
+   4. Переход к коллекции
+--------------------------- */
+function openCollection(id) {
+    // просто переходим — параметры уже сохранены
     window.location.href = `/collection/?id=${id}`;
 }
 
+/* --------------------------
+   5. Пагинация
+--------------------------- */
 function renderPagination() {
     const totalPages = Math.ceil(totalItems / itemsPerPage);
     const pagination = document.getElementById("pagination");
@@ -126,8 +142,7 @@ function renderPagination() {
     pagination.appendChild(createPageItem("<", start - 1, start === 1));
 
     for (let i = start; i <= end; i++) {
-        const li = createPageItem(i, i, false, i === currentPage);
-        pagination.appendChild(li);
+        pagination.appendChild(createPageItem(i, i, false, i === currentPage));
     }
 
     pagination.appendChild(createPageItem(">", end + 1, end === totalPages));

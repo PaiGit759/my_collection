@@ -131,24 +131,19 @@
 
         <script>
           // Go to the home page with the saved page
+
           function goToIndex() {
-            const page = localStorage.getItem('galleryPage') || 1;
-
-            const saved = localStorage.getItem('galleryFilters');
-            const params = new URLSearchParams();
-
-            params.append('page', page);
+            const saved = localStorage.getItem("returnParams");
 
             if (saved) {
-              const { sort, group, user } = JSON.parse(saved);
-
-              if (sort) params.append('sort', sort);
-              if (group) params.append('group', group);
-              if (user) params.append('user', user);
+              window.location.href = `/?${saved}`;
+              return;
             }
 
-            window.location.href = `/?${params.toString()}`;
+            // запасной вариант — если по какой-то причине ничего не сохранилось
+            window.location.href = "/";
           }
+
 
 
         </script>

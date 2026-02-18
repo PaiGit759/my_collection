@@ -14,6 +14,8 @@ const { getGridFSBucket } = require("./controllers/gridfs.js");
 
 const User = require('./models/userModel.js');
 
+const Collection = require('./models/collectionModel.js');
+
 
 const app = express();
 
@@ -98,7 +100,7 @@ app.get('/sortingselection', async (req, res) => {
   res.render('sortingselection', { users });
 });
 
-app.get('/gallery/count', async (req, res) => {
+/* app.get('/gallery/count', async (req, res) => {
   const filter = {};
 
   if (req.query.group) filter.group = req.query.group;
@@ -108,6 +110,31 @@ app.get('/gallery/count', async (req, res) => {
     const count = await Collection.countDocuments(filter);
     res.json({ count });
   } catch (err) {
+    res.status(500).json({ error: 'Count error' });
+  }
+}); */
+
+
+app.get('/gallery/count', async (req, res) => {
+  const filter = {};
+
+  if (req.query.group) {
+    filter.group = req.query.group;
+  }
+
+  if (req.query.user) {
+    if (mongoose.Types.ObjectId.isValid(req.query.user)) {
+      filter.user = new mongoose.Types.ObjectId(req.query.user);
+    } else {
+      console.warn("Invalid user ObjectId:", req.query.user);
+    }
+  }
+
+  try {
+    const count = await Collection.countDocuments(filter);
+    res.json({ count });
+  } catch (err) {
+    console.error("Count error:", err);
     res.status(500).json({ error: 'Count error' });
   }
 });
