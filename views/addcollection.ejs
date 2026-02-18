@@ -10,13 +10,6 @@
           <div class="col-lg-8 col-md-10">
             <form id="addcollection" method="post" action="api/addcollection" enctype="multipart/form-data">
 
-              <!-- <div class="mb-3">
-                <label class="form-label">Title
-                  <input type="text" name="title" id="title" class="form-control">
-                </label>
-              </div> -->
-
-
               <div class="row mb-4">
 
                 <div class="col-12 col-md-6 mb-3">
@@ -33,8 +26,6 @@
                   </div>
 
                 </div>
-
-
 
                 <div class="mb-3">
                   <label class="form-label">Content</label>
@@ -92,6 +83,27 @@
         </div>
       </div>
 
+
+      <div id="spinner" class="spinner-overlay" style="display:none;">
+        <div class="spinner-border text-primary" role="status"></div>
+      </div>
+
+      <style>
+        .spinner-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(255, 255, 255, 0.7);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          z-index: 9999;
+        }
+      </style>
+
+
       <%- include('./partials/footer.ejs') %>
         <script src="/js/userfoto.js"></script>
 
@@ -133,6 +145,26 @@
             setupPreview('input-foto2', 'preview-foto2', 'file-name2');
           });
         </script>
+
+        <script>
+          document.addEventListener("DOMContentLoaded", () => {
+            const form = document.getElementById("addcollection");
+
+            form.addEventListener("submit", () => {
+              // показываем спиннер
+              document.getElementById("spinner").style.display = "flex";
+
+              // блокируем кнопку, чтобы не нажали повторно
+              const submitBtn = form.querySelector('input[type="submit"]');
+              if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.value = "Submitting...";
+              }
+            });
+          });
+        </script>
+
+
   </body>
 
 </html>
