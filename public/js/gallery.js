@@ -102,12 +102,12 @@ async function renderGallery(pageItems, page) {
     hideSpinner();
 }
 
-// Сохраняем параметры ТОЛЬКО при клике "Read more"
+// Save the settings ONLY when you click "Read more"
 function openCollection(id, page) {
     const params = new URLSearchParams(window.location.search);
     params.set("page", page);
 
-    // сохраняем все текущие параметры + актуальную страницу
+    // save all current parameters + current page
     localStorage.setItem("returnParams", params.toString());
 
     window.location.href = `/collection/?id=${id}`;

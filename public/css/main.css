@@ -153,9 +153,23 @@ h2 a {
 }
 
 .card-img-top {
-  height: 150px; /* fixed image height */
+  height: 200px;
   width: 100%;
-  object-fit: cover; /* crops the image while maintaining its aspect ratio */
+  object-fit: cover;
+}
+
+@media (max-width: 576px) {
+  .card-img-top {
+    width: 100%;
+    aspect-ratio: 1 / 1; /* квадрат */
+    height: auto; /* важно: убираем фиксированную высоту */
+    object-fit: contain; /* показываем фото полностью */
+    background: #f0f0f0; /* фон, если будут пустые поля */
+  }
+
+  .card {
+    height: auto; /* карточка сама подстраивается */
+  }
 }
 
 .card-body {
