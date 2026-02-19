@@ -128,9 +128,26 @@ h2 a {
 }
 
 .container_vid1 {
-  margin-top: 70px;
   background-color: #bef3d3;
+  margin-top: 37px;
+  padding-bottom: 70px !important;
 }
+
+/* .container_vid1 {
+  background-color: #bef3d3;
+  padding-top: 40px;
+  padding-bottom: 70px !important;
+} */
+
+@media (max-width: 576px) {
+  .container_vid1 {
+    margin-top: 70px !important;
+  }
+}
+
+/* body {
+  padding-top: 60px !important; 
+} */
 
 .user_vid {
   margin-top: 50px;
@@ -153,7 +170,7 @@ h2 a {
 }
 
 .card-img-top {
-  height: 200px;
+  height: 199px;
   width: 100%;
   object-fit: cover;
 }
@@ -182,14 +199,28 @@ h2 a {
 
 .navbar {
   background-color: #502173 !important;
+  padding-top: 0.1rem !important;
+  padding-bottom: 0.1rem !important;
+  margin-bottom: 0 !important;
 }
 
 .navbar .nav-link {
   color: white !important; /* Text color */
-  font-size: x-large;
+  /*   font-size: x-large; */
+
+  padding-top: 0.1rem !important;
+  padding-bottom: 0.1rem !important;
+  font-size: 1.1rem !important;
 }
 
 .navbar-brand {
   font-weight: 700;
   color: #ecf0f1 !important;
+  padding-top: 0.1rem !important;
+  padding-bottom: 0.1rem !important;
+}
+
+.navbar .container-fluid {
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
 }

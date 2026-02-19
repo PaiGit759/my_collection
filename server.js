@@ -100,21 +100,6 @@ app.get('/sortingselection', async (req, res) => {
   res.render('sortingselection', { users });
 });
 
-/* app.get('/gallery/count', async (req, res) => {
-  const filter = {};
-
-  if (req.query.group) filter.group = req.query.group;
-  if (req.query.user) filter.user = req.query.user;
-
-  try {
-    const count = await Collection.countDocuments(filter);
-    res.json({ count });
-  } catch (err) {
-    res.status(500).json({ error: 'Count error' });
-  }
-}); */
-
-
 app.get('/gallery/count', async (req, res) => {
   const filter = {};
 

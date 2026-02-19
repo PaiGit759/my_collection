@@ -60,7 +60,7 @@ async function renderGallery(pageItems, page) {
     gallery.innerHTML = "";
 
     const pageHeader = document.createElement("h5");
-    pageHeader.className = "text-center my-3";
+    pageHeader.className = "text-center my-0";
     pageHeader.textContent = `Page № ${page}`;
     gallery.appendChild(pageHeader);
 

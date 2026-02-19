@@ -8,10 +8,10 @@
 
     <%- include('./partials/nav.ejs') %>
 
-      <div class=" container container_vid1 py-4">
+      <div class=" container container_vid1">
 
 
-        <div id="spinner" class="text-center my-4" style="display: none;">
+        <div id="spinner" class="text-center" style="display: none;">
           <div class="spinner-border text-primary" role="status">
             <span class="visually-hidden">Loading...</span>
           </div>
@@ -19,8 +19,8 @@
 
         <div id="gallery" class="row g-3"></div>
 
-        <nav class="d-flex justify-content-center mt-4">
-          <ul class="pagination" id="pagination" style="margin-bottom: 40px ;"></ul>
+        <nav class="d-flex justify-content-center mt-0">
+          <ul class="pagination" id="pagination"></ul>
         </nav>
       </div>
 
@@ -31,6 +31,29 @@
             background-color: #78dbd1;
             border-color: #36a8e5;
             color: #e3ee08;
+          }
+
+
+          #gallery.row {
+            --bs-gutter-y: 0.5rem;
+            --bs-gutter-x: 0.5rem;
+          }
+
+          .pagination .page-link {
+            padding: 0.25rem 0.5rem;
+            font-size: 0.9rem;
+          }
+
+          /*     #gallery h5 {
+            margin-bottom: 0.2rem !important;
+          } */
+
+          nav .pagination {
+            margin-top: 0 !important;
+          }
+
+          body {
+            margin: 0;
           }
         </style>
 
@@ -44,6 +67,8 @@
 
         <script src="/js/gallery.js"></script>
         <script src="/js/userfoto.js"></script>
+
+
 
   </body>
 
