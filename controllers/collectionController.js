@@ -193,8 +193,6 @@ const updatecollection = async (req, res) => {
     }
 };
 
-
-
 const getallcollection = (req, res) => {
     const title = 'My collection';
     Collection
@@ -203,13 +201,6 @@ const getallcollection = (req, res) => {
         .then((collection) => res.json(collection))
         .catch((error) => handleError(res, error));
 };
-
-/* const getgallerycount = (req, res) => {
-    Collection
-        .countDocuments({})
-        .then((count) => res.json({ count }))
-        .catch((error) => handleError(res, error));
-}; */
 
 const getgallerycount = async (req, res) => {
 
@@ -222,7 +213,7 @@ const getgallerycount = async (req, res) => {
         }
 
         if (req.query.user) {
-            // ВАЖНО: приводим к ObjectId
+            // IMPORTANT: convert to ObjectId
             filter.user = new mongoose.Types.ObjectId(req.query.user);
         }
 
@@ -256,17 +247,12 @@ const getgallerypage = async (req, res) => {
         filter.user = req.query.user;
     }
     try {
-        /*        const items = await Collection
-                   .find(filter, { image: 0 })
-                   .skip(skip)
-                   .limit(limit)
-                   .sort({ createdAt: sortOrder }); */
 
         const items = await Collection
             .find(filter, { image: 0 })
-            .sort({ createdAt: sortOrder })   // СНАЧАЛА сортировка
-            .skip(skip)                       // потом пропуск
-            .limit(limit);                    // потом ограничение
+            .sort({ createdAt: sortOrder })
+            .skip(skip)
+            .limit(limit);
 
 
         res.json(items);

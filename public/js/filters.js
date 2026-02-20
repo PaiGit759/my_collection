@@ -53,4 +53,60 @@ document.getElementById('resetAll').addEventListener('click', () => {
     window.location.href = '/sortingselection'; // или твой путь к странице сортировки
 });
 
+/* document.getElementById("filterForm").addEventListener("submit", function () {
+    const formData = new FormData(this);
 
+    // Сохраняем сортировку отдельно
+    const sort = formData.get("sort") || "asc";
+    localStorage.setItem("sortOrder", sort);
+
+    // Сохраняем фильтры (group, user)
+    const params = new URLSearchParams();
+    if (formData.get("group")) params.append("group", formData.get("group"));
+    if (formData.get("user")) params.append("user", formData.get("user"));
+
+    localStorage.setItem("galleryFilters", params.toString());
+}); */
+
+document.getElementById("filterForm").addEventListener("submit", function () {
+    const formData = new FormData(this);
+
+    const sort = formData.get("sort") || "asc";
+    localStorage.setItem("sortOrder", sort);
+
+    const params = new URLSearchParams();
+
+    if (formData.get("group")) params.append("group", formData.get("group"));
+    if (formData.get("user")) params.append("user", formData.get("user"));
+
+    localStorage.setItem("galleryFilters", params.toString());
+});
+
+
+
+document.getElementById("resetAll").addEventListener("click", function () {
+    localStorage.removeItem("galleryFilters");
+    localStorage.setItem("sortOrder", "asc"); // сортировка по умолчанию
+});
+
+
+window.addEventListener("DOMContentLoaded", () => {
+    const savedSort = localStorage.getItem("sortOrder") || "asc";
+
+    const radio = document.querySelector(`input[name="sort"][value="${savedSort}"]`);
+    if (radio) radio.checked = true;
+
+    // Подставляем фильтры, если они есть
+    const savedFilters = localStorage.getItem("galleryFilters");
+    if (savedFilters) {
+        const params = new URLSearchParams(savedFilters);
+
+        if (params.get("group")) {
+            document.getElementById("groupInput").value = params.get("group");
+        }
+
+        if (params.get("user")) {
+            document.getElementById("userSelect").value = params.get("user");
+        }
+    }
+});

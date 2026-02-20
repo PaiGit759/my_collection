@@ -4,7 +4,6 @@ const imgUser = document.getElementById('userfoto');
 
 if (user) {
     // Setting up a user photo
-    //    imgUser.src = "data:image/png;base64," + user.foto;
 
     if (user.foto) {
         imgUser.src = `/user/foto/${user.foto}`;
@@ -12,11 +11,15 @@ if (user) {
         imgUser.src = "/image/UndefinedUser.jpg";
     }
 
-
-
     // Wrap the image in a link to the profile
     const link = document.createElement('a');
+
     link.href = `/user?id=${user._id}`;
+
+    link.addEventListener("click", () => {
+        if (window.location.pathname === "/" && window.location.search.length > 1) { localStorage.setItem("returnParams", window.location.search.substring(1)); }
+    });
+
     link.textContent = 'Current user ';
     imgUser.parentNode.insertBefore(link, imgUser);
     link.appendChild(imgUser);

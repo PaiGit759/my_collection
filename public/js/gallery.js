@@ -15,6 +15,11 @@ async function fetchTotalCount() {
     try {
         const params = new URLSearchParams(window.location.search);
 
+        if (!params.has("sort")) {
+            const savedSort = localStorage.getItem("sortOrder") || "asc"; params.set("sort", savedSort);
+            history.replaceState(null, "", `${location.pathname}?${params.toString()}`);
+        }
+
         const res = await fetch(`/gallery/count?${params.toString()}`);
         const data = await res.json();
 

@@ -9,7 +9,8 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+        <!-- <li class="nav-item"><a href="/" class="nav-link">Home</a></li> -->
+        <a href="#" class="nav-link" id="home-link">Home</a>
 
         <li class="nav-item"><a href="/login" class="nav-link">Login</a></li>
         <li class="nav-item"><a href="/register" class="nav-link">Register</a></li>
@@ -25,20 +26,6 @@
   </div>
 
   <style>
-    /*     .navbar {
-      background: linear-gradient(#a359db, #502173) !important;
-    }
-
-    .navbar .nav-link {
-      color: white !important;
-      font-size: x-large;
-    }
-
-    .navbar-brand {
-      font-weight: 700;
-      color: #ecf0f1 !important;
-    } */
-
     .navbar {
       padding-top: 0.2rem !important;
       padding-bottom: 0.2rem !important;
@@ -63,5 +50,26 @@
       padding-top: 0 !important;
     }
   </style>
+
+  <script>
+    document.getElementById("home-link").addEventListener("click", function (e) {
+      e.preventDefault();
+
+      const sort = localStorage.getItem("sortOrder") || "asc";
+
+      const params = new URLSearchParams();
+      params.set("sort", sort);
+
+      // ВАЖНО: фильтры намеренно НЕ добавляем
+      // никакого galleryFilters здесь
+
+      window.location.href = "/?" + params.toString();
+    });
+  </script>
+
+
+
+
+
 
 </nav>
